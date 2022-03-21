@@ -1,0 +1,61 @@
+@media screen and (max-width: 480px) {
+  .login-box {
+    width: 100vw;
+    border-radius: 30px;
+  }
+}
+
+@media screen and (min-width: 480px) {
+  .login-box {
+    width: 480px;
+  }
+}
+
+.login-welcome {
+  width: 268px;
+}
+.login-email,
+.login-username,
+.login-password,
+.login-submit {
+  width: 268px;
+  text-align: center;
+}
+.login-email-input,
+.login-username-input,
+.login-password-input {
+  border-radius: 16px;
+  border-style: solid;
+  border-width: 2px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-color: grey;
+  background-color: transparent;
+}
+
+.login-submit-input {
+  border-radius: 20px;
+  border-color: transparent;
+  background-color: red;
+  color: white;
+}
+.login-submit-google-input {
+  border-radius: 20px;
+  border-color: blue;
+  background-color: white;
+  color: blue;
+}
+.login-welcome-text {
+  font-size: 1.5rem;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-weight: bold;
+}
+.login-password {
+  position: relative;
+}
+.passEye {
+  position: absolute;
+  right: 10px;
+  top: 15px;
+  cursor: pointer;
+}

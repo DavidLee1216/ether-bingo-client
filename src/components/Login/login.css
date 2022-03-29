@@ -1,29 +1,87 @@
 @media screen and (max-width: 480px) {
   .login-box {
-    width: 100vw;
     border-radius: 30px;
+  }
+  .wrapper-relative-box {
+    width: 90vw;
+  }
+  .close-button {
+    right: 10px;
+    top: 10px;
+  }
+  .login-email,
+  .login-username,
+  .login-password,
+  .login-submit,
+  .login-name-wrapper {
+    width: 90%;
   }
 }
 
 @media screen and (min-width: 480px) {
-  .login-box {
+  .wrapper-relative-box {
     width: 480px;
+  }
+  .close-button {
+    top: 0;
+    right: -40px;
+  }
+  .login-email,
+  .login-username,
+  .login-password,
+  .login-submit,
+  .login-name-wrapper {
+    width: 368px;
   }
 }
 
-.login-welcome {
-  width: 268px;
+.wrapper-login-box {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  transition: 0.25s ease-in-out;
+  padding-top: 120px;
+  z-index: 120;
 }
+
+.login-box {
+  background-color: azure;
+  border-radius: 30px;
+  padding-top: 30px;
+  padding-bottom: 20px;
+}
+
+.wrapper-login-box.hidden {
+  transform: translate(0, -100%);
+  top: -500px;
+}
+
+.wrapper-relative-box {
+  position: relative;
+}
+
+.login-welcome {
+  width: 368px;
+  padding-top: 30px;
+}
+
 .login-email,
 .login-username,
 .login-password,
-.login-submit {
-  width: 268px;
+.login-submit,
+.login-name-wrapper {
+  /* width: 368px; */
   text-align: center;
 }
 .login-email-input,
 .login-username-input,
 .login-password-input {
+  width: 100%;
+  height: 48px;
   border-radius: 16px;
   border-style: solid;
   border-width: 2px;
@@ -32,23 +90,47 @@
   border-color: grey;
   background-color: transparent;
 }
-
+.login-name-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+.login-first-name-input,
+.login-last-name-input {
+  width: 48%;
+  height: 48px;
+  border-radius: 16px;
+  border-style: solid;
+  border-width: 2px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-color: grey;
+  background-color: transparent;
+}
 .login-submit-input {
+  width: 100%;
+  height: 40px;
   border-radius: 20px;
   border-color: transparent;
   background-color: red;
   color: white;
 }
 .login-submit-google-input {
+  width: 100%;
+  height: 40px;
   border-radius: 20px;
   border-color: blue;
   background-color: white;
   color: blue;
+  margin-bottom: 30px;
 }
 .login-welcome-text {
   font-size: 1.5rem;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-weight: bold;
+  color: black;
+  text-align: center;
+  text-transform: uppercase;
 }
 .login-password {
   position: relative;
@@ -58,4 +140,22 @@
   right: 10px;
   top: 15px;
   cursor: pointer;
+}
+
+.close-button {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  background-color: azure;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.goto-signup,
+.goto-login {
+  cursor: pointer;
+  color: blue;
 }

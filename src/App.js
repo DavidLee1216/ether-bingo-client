@@ -6,17 +6,24 @@ import Store from "./store";
 import HomePage from "./pages/HomePage";
 import DepositPage from "./pages/DepositPage";
 import ProfilePage from "./pages/ProfilePage";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import AuthenticationPage from "./pages/AuthenticationPage";
 
 const store = Store();
 function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
+        <Header></Header>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/deposit" element={<DepositPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/auth" element={<AuthenticationPage />} />
+          <Route path="/auth/:id/:key" element={<AuthenticationPage />} />
         </Routes>
+        <Footer></Footer>
       </BrowserRouter>
     </Provider>
   );

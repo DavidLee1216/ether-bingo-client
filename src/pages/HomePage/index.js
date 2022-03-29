@@ -5,11 +5,7 @@ function HomePage() {
   useLayoutEffect(() => {
     document.body.style.backgroundColor = "rgb(12, 34, 56)";
   }, []);
-  return (
-    <div>
-      <Header>HomePage</Header>
-    </div>
-  );
+  return <div>{/* <Header>HomePage</Header> */}</div>;
 }
 
 export default HomePage;

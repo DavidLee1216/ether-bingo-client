@@ -49,6 +49,8 @@ export const authorize = (data) => (dispatch) => {
 export const logout = () => (dispatch) => {
   return AuthService.logout().then((response) => {
     dispatch(logOut());
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   });
 };
 

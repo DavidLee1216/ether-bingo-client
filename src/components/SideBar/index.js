@@ -19,14 +19,13 @@ function SideBar({ hidden }) {
           <span className="text">Home</span>
         </ItemWrapper>
       </IconWrapper>
-      <IconWrapper>
+      <IconWrapper onClick={handleHelpArrow}>
         <ItemWrapper>
           <HelpIcon></HelpIcon>
           <span className="text">Help</span>
         </ItemWrapper>
         <ArrowDropDownIcon
           className={`arrow me-3 ${helpArrowUp ? "hidden" : "show"}`}
-          onClick={handleHelpArrow}
         />
       </IconWrapper>
     </div>
@@ -35,10 +34,10 @@ function SideBar({ hidden }) {
 
 const IconWrapper = styled.div`
   .MuiSvgIcon-root {
-    color: rgba(213, 222, 231, 0.7);
+    color: rgba(255, 255, 255, 1);
   }
   .text {
-    color: rgba(213, 222, 0, 0.7);
+    color: rgba(255, 255, 255, 1);
     text-align: center;
     margin-left: 20px;
   }

@@ -7,7 +7,7 @@ export const parseJwt = (token) => {
     return null;
   }
 };
-const AuthVerify = (logOut) => {
+const AuthVerify = ({ logOut }) => {
   const token = localStorage.getItem("token");
   if (token) {
     const decodedJwt = parseJwt(token);

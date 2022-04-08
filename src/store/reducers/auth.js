@@ -33,7 +33,7 @@ export const AuthReducer = (states = INITIAL_STATE, action) => {
         return {
           ...states,
           authUser: {
-            user: JSON.parse(localStorage.user),
+            user: localStorage.user,
             authState: AUTH_LOGIN,
           },
         };

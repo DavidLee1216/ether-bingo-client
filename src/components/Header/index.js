@@ -18,7 +18,7 @@ import axios from "axios";
 import axiosInstance from "../../axios";
 import AuthVerify, { parseJwt } from "../../utils/authVerify";
 import { logout, jwtSetUserState } from "../../store/actions/authActions";
-import UserInfoNav from "./userInfo";
+import UserInfoNav from "./userInfoHeader";
 
 function Header() {
   const [sideBarOpen, setSideBarOpen] = useState(false);

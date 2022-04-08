@@ -8,7 +8,7 @@
   height: 100%;
   padding-top: 20px;
   padding-left: 20px;
-  background-color: #1b1928;
+  background-color: black; /*#1b1928;*/
   /* transition: all 0.5s; */
   transition: 0.25s ease-in-out;
 

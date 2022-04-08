@@ -16,9 +16,7 @@ const auth = (data) => {
 };
 
 const logout = () => {
-  axios.post("/api/user/signout/").then((response) => {
-    localStorage.removeItem("token");
-  });
+  axios.post("/api/user/signout/");
 };
 
 export default { register, login, auth, logout };

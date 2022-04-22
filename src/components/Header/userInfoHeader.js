@@ -5,9 +5,10 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 import { ReactComponent as CoinIcon } from "../../assets/img/coin-stack.svg";
 
-export default function UserInfoNav({ authUserState, bingoState }) {
+export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
   const [userArrowUp, setuserArrowUp] = useState(false);
   const userArrowWrapperRef = useRef();
+  const user = JSON.parse(localStorage.user);
 
   const handleOverUserArrow = (e) => {
     setuserArrowUp((prev) => !prev);
@@ -33,7 +34,7 @@ export default function UserInfoNav({ authUserState, bingoState }) {
     <UserWrapper>
       <CoinWrapper>
         <CoinIcon className="coin-icon" width={30} height={30}></CoinIcon>
-        <div className="credits-div">{bingoState.credits}</div>
+        <div className="credits-div">{userCoinState.amount}</div>
       </CoinWrapper>
 
       <UsernameWrapper
@@ -42,7 +43,7 @@ export default function UserInfoNav({ authUserState, bingoState }) {
         ref={userArrowWrapperRef}
         // onMouseLeave={handleLeaveUserArrow}
       >
-        <div className="account-div">{authUserState.user.username}</div>
+        <div className="account-div">{user ? user.username : ""}</div>
         <ArrowDropDownIcon
           className={`arrow me-3 ${userArrowUp ? "hidden" : "show"}`}
         ></ArrowDropDownIcon>
@@ -54,9 +55,12 @@ export default function UserInfoNav({ authUserState, bingoState }) {
             <NavLink className="navlink" to="/transaction">
               My Transaction
             </NavLink>
-            <NavLink className="navlink" to="/wallet">
-              Wallet
+            <NavLink className="navlink" to="/buycoin">
+              Buy Coin
             </NavLink>
+            <a className="navlink" href="/" onClick={logOut}>
+              Logout
+            </a>
           </UserDropdownWrapper>
         </div>
       </UsernameWrapper>

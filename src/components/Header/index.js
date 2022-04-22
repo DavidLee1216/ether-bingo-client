@@ -1,4 +1,11 @@
-import React, { useState, useLayoutEffect, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useLayoutEffect,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
+import { useNavigate } from "react-router-dom";
 import "styled-components";
 import styled from "styled-components";
 import SideBar from "../SideBar";
@@ -15,18 +22,25 @@ import {
 } from "../../store/actions/authActions/types";
 import { BingoActionTypes } from "../../store/actions/bingoActions";
 import axios from "axios";
-import axiosInstance from "../../axios";
+// import axiosInstance from "../../axios";
 import AuthVerify, { parseJwt } from "../../utils/authVerify";
 import { logout, jwtSetUserState } from "../../store/actions/authActions";
 import UserInfoNav from "./userInfoHeader";
+import HeaderLogo from "../HeaderLogo";
+import {
+  getCoins,
+  CheckCoins,
+  getCredits,
+} from "../../store/actions/userActions";
 
 function Header() {
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const [registerHidden, setRegisterHidden] = useState(true);
   const [loginHidden, setLoginHidden] = useState(true);
   const authUserState = useSelector((state) => state.AuthReducer.authUser);
-  const bingoState = useSelector((state) => state.BingoReducer.bingo);
+  const userCoinState = useSelector((state) => state.UserInfoReducer.userCoin);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSideBar = (e) => {
     setSideBarOpen((prev) => !prev);
@@ -55,8 +69,24 @@ function Header() {
   };
   const logOut = () => {
     dispatch(logout());
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
   };
-  const onSilentRefresh = () => {
+  // const getCredits = () => {
+  //   if (localStorage.user) {
+  //     const user = JSON.parse(localStorage.user);
+  //     let data = {
+  //       username: user.username,
+  //     };
+  //     getCoins(data)
+  //       .then((response) => {
+  //         const amount = response.data.coin;
+  //         dispatch(CheckCoins(amount));
+  //       })
+  //       .catch((error) => {});
+  //   }
+  // };
+  const onSilentRefresh = useCallback(() => {
     if (localStorage.token) {
       const decodedJwt = parseJwt(localStorage.token);
       if (decodedJwt.exp * 1000 < Date.now()) {
@@ -67,30 +97,33 @@ function Header() {
           .post("/api/token/refresh/", { refresh: localStorage.token })
           .then((response) => {
             const accessToken = response.data.access;
-            axiosInstance.defaults.headers["Authorization"] =
-              "Bearer " + accessToken;
+            axios.defaults.headers["Authorization"] = "JWT " + accessToken;
             dispatch(jwtSetUserState());
           });
       }
     }
-  };
+  });
 
   useLayoutEffect(() => {
     onSilentRefresh();
+    dispatch(getCredits());
   }, []);
 
   return (
     <header>
       <nav className="header navbar">
-        <button
-          className={`nav-sidebar-btn ${sideBarOpen ? "is-opened" : ""}`}
-          onClick={handleSideBar}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <div className="d-flex align-items-center">
+          <button
+            className={`nav-sidebar-btn ${sideBarOpen ? "is-opened" : ""}`}
+            onClick={handleSideBar}
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <HeaderLogo></HeaderLogo>
+        </div>
         {!localStorage.user ? (
           <LoginWrapper>
             <button className="login-button" onClick={handleLogin}>
@@ -103,7 +136,8 @@ function Header() {
         ) : (
           <UserInfoNav
             authUserState={authUserState}
-            bingoState={bingoState}
+            userCoinState={userCoinState}
+            logOut={logOut}
           ></UserInfoNav>
         )}
       </nav>

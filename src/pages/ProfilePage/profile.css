@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Secular+One&display=swap");
+
+.profile {
+  background-color: rgb(12, 34, 56);
+  height: 100vh;
+}
+.profile-title {
+  font-family: "Secular One", sans-serif;
+  font-size: 3em;
+  font-weight: 900;
+  color: blanchedalmond;
+  margin-top: 50px;
+  margin-bottom: 30px;
+}
+.city-input,
+.country-select,
+.city-select {
+  height: 40px;
+}
+.country-wrapper,
+.city-wrapper,
+.gender-wrapper,
+.main-wallet-wrapper,
+.wallet-button {
+  margin-bottom: 30px;
+}
+.save-button {
+  width: 120px;
+  height: 40px;
+}

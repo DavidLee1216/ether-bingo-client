@@ -29,15 +29,6 @@ export const AuthReducer = (states = INITIAL_STATE, action) => {
       return INITIAL_STATE;
 
     default:
-      if (localStorage.user) {
-        return {
-          ...states,
-          authUser: {
-            user: localStorage.user,
-            authState: AUTH_LOGIN,
-          },
-        };
-      }
       return states;
   }
 };

@@ -1,11 +1,16 @@
 import React, { useLayoutEffect } from "react";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import "./home.css";
 
 function HomePage() {
-  useLayoutEffect(() => {
-    document.body.style.backgroundColor = "rgb(12, 34, 56)";
-  });
-  return <div>{/* <Header>HomePage</Header> */}</div>;
+  useLayoutEffect(() => {});
+  return (
+    <div className="home">
+      {/* <Header>HomePage</Header> */}
+      <Footer></Footer>
+    </div>
+  );
 }
 
 export default HomePage;

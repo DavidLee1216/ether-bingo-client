@@ -1,6 +1,6 @@
 import * as authTypes from "./types";
 import AuthService from "../../../services/auth.service";
-import axiosInstance from "../../../axios";
+import axios from "axios";
 
 export { authTypes };
 
@@ -40,17 +40,20 @@ export const login = (data) => (dispatch) => {
 };
 
 export const authorize = (data) => (dispatch) => {
-  return AuthService.auth(data).then((response) => {
-    recordLoginInfo(response, dispatch);
-    return Promise.resolve();
-  });
+  return AuthService.auth(data).then(
+    (response) => {
+      recordLoginInfo(response, dispatch);
+      return Promise.resolve();
+    },
+    (error) => {
+      return Promise.reject();
+    }
+  );
 };
 
 export const logout = () => (dispatch) => {
   return AuthService.logout().then((response) => {
     dispatch(logOut());
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
   });
 };
 
@@ -59,6 +62,7 @@ export const recordLoginInfo = (response, dispatch) => {
   const accessToken = response.data.token.access;
   const refreshToken = response.data.token.refresh;
   const backUserInfo = {
+    id: user.id,
     email: user.email,
     username: user.username,
     wallet_adress: user.wallet_adress,
@@ -67,7 +71,7 @@ export const recordLoginInfo = (response, dispatch) => {
   };
   localStorage.setItem("token", refreshToken);
   localStorage.setItem("user", JSON.stringify(backUserInfo));
-  axiosInstance.defaults.headers["Authorization"] = "Bearer " + accessToken;
+  axios.defaults.headers["Authorization"] = "JWT " + accessToken;
   dispatch(setAuthState(backUserInfo, authTypes.AUTH_LOGIN));
 };
 

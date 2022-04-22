@@ -16,7 +16,7 @@ const auth = (data) => {
 };
 
 const logout = () => {
-  axios.post("/api/user/signout/");
+  return axios.post("/api/user/signout/");
 };
 
 export default { register, login, auth, logout };

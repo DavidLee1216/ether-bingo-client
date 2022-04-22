@@ -10,6 +10,7 @@ import GoogleIcon from "@mui/icons-material/Google";
 import CloseIcon from "@mui/icons-material/Close";
 import LoadingIndicator from "../../utils/loading";
 import { login as authLogin } from "../../store/actions/authActions";
+import { getCredits } from "../../store/actions/userActions";
 
 import axios from "axios";
 
@@ -62,9 +63,9 @@ function Login({ hidden, closeClicked, gotoSignUp, signed }) {
       .then((response) => {
         notMatchRef.current.style.display = "none";
         setEmptyMessage(false);
-        localStorage.password = password;
         setLoading(false);
         signed();
+        dispatch(getCredits());
         navigate("/");
       })
       .catch((error) => {

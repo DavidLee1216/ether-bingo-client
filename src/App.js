@@ -9,6 +9,7 @@ import ProfilePage from "./pages/ProfilePage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AuthenticationPage from "./pages/AuthenticationPage";
+import BuyCoinPage from "./pages/BuyCoinPage";
 
 const store = Store();
 function App() {
@@ -20,10 +21,10 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/deposit" element={<DepositPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/buycoin" element={<BuyCoinPage />} />
           <Route path="/auth" element={<AuthenticationPage />} />
           <Route path="/auth/:id/:key" element={<AuthenticationPage />} />
         </Routes>
-        <Footer></Footer>
       </BrowserRouter>
     </Provider>
   );

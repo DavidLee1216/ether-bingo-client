@@ -5,12 +5,13 @@ dotenv.config();
 // axios.defaults.baseURL = process.env.REACT_APP_BASE_URL;
 // axios.defaults.withCredentials = true;
 const axiosInstance = axios.create({
+  // url: "http:127.0.0.1:8000",
   baseURL: process.env.REACT_APP_BASE_URL,
-  withCredentials: true,
+  // withCredentials: true,
   timeout: 5000,
   headers: {
-    Authorization: localStorage.getItem("access_token")
-      ? "Bearer " + localStorage.getItem("access_token")
+    Authorization: localStorage.getItem("token")
+      ? "JWT " + localStorage.getItem("token")
       : null,
     "Content-Type": "application/json",
     accept: "application/json",

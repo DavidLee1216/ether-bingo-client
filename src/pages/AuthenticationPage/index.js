@@ -28,6 +28,11 @@ function AuthenticationPage() {
           console.log("error auth");
           setLoading(false);
         });
+    } else {
+      console.log(localStorage.user);
+      if (localStorage.token) {
+        navigate("/");
+      }
     }
   }, []);
   return (

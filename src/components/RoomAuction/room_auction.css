@@ -1,0 +1,85 @@
+@media screen and (max-width: 480px) {
+}
+@media screen and (min-width: 480px) and (max-width: 760px) {
+}
+@media screen and (min-width: 760px) {
+}
+
+.room-auction {
+  position: relative;
+  width: 300px;
+  height: 400px;
+  background-color: black;
+  border-radius: 20px;
+  margin: 15px;
+  /* box-shadow: 0 4px 8px 0 rgba(0, 255, 255, 0.2),
+    0 6px 20px 0 rgba(0, 255, 255, 0.19); */
+  box-shadow: 2px 2px 3px 1px rgba(222, 222, 228, 0.2),
+    -2px -2px 3px 1px rgba(222, 222, 228, 0.2);
+  cursor: pointer;
+}
+
+.room-background {
+  position: absolute;
+  left: 50px;
+  top: 100px;
+  width: 200px;
+  height: 200px;
+  opacity: 0.4;
+  z-index: 3;
+}
+
+.room-id {
+  color: white;
+  padding-left: 10px;
+  padding-top: 5px;
+  font-size: 1em;
+}
+
+.room-remain-time {
+  margin-top: 30px;
+  text-align: center;
+  color: white;
+  font-size: 1.5em;
+  letter-spacing: 0.1em;
+}
+
+.room-curr-price {
+  margin-top: 10px;
+  text-align: center;
+  color: gold;
+  font-size: 1.5em;
+  font-weight: 400;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.room-last-bidder {
+  position: relative;
+  margin-top: 10px;
+  text-align: center;
+  color: red;
+  font-size: 2em;
+  font-weight: 700;
+  z-index: 10;
+}
+
+.room-bid-button {
+  position: relative;
+  width: 120px;
+  min-height: 40px;
+  color: white;
+  font-size: 1.6em;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 5px;
+  border-color: rgb(30, 30, 161);
+  background-image: linear-gradient(rgb(30, 30, 161), rgb(38, 68, 97));
+  margin-top: 80px;
+}
+.room-bid-button:hover {
+  background-image: linear-gradient(rgb(57, 57, 224), rgb(53, 112, 168));
+}
+.room-price-per-bid,
+.room-coins-per-bid {
+  color: white;
+}

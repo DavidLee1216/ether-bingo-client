@@ -89,7 +89,10 @@ function ProfilePage() {
         toast.success("Profile saved successfully.");
       },
       (error) => {
-        console.log(error.response.data);
+        if (error.response.status === 409) {
+          toast.error("Main wallet is already in use");
+          return;
+        }
         toast.error("Something is wrong.");
       }
     );

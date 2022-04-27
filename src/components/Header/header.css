@@ -87,8 +87,8 @@
     font-size: 0.8em;
   }
   .credits-div {
-    min-width: 70px;
-    font-size: 0.8em;
+    max-width: 70px;
+    font-size: 0.9em;
   }
   .register-button {
     min-width: 120px;
@@ -98,8 +98,17 @@
     min-width: 100px;
     font-size: 0.8em;
   }
+  .user-wrapper {
+    margin-right: 20px;
+  }
+  .user-drop-down-wrapper {
+    min-width: 110px;
+  }
   .logo-wrapper {
     display: none;
+  }
+  .coin-wrapper {
+    margin-right: 10px;
   }
 }
 
@@ -109,35 +118,59 @@
     font-size: 0.6em;
   }
   .credits-div {
-    min-width: 50px;
-    font-size: 0.6em;
+    max-width: 50px;
+    font-size: 0.8em;
   }
   .register-button {
     min-width: 100px;
     font-size: 0.6em;
   }
   .account-div {
-    min-width: 70px;
+    min-width: 90px;
     font-size: 0.6em;
+  }
+  .user-wrapper {
+    margin-right: 0px;
+  }
+  .user-drop-down-wrapper {
+    min-width: 100px;
   }
   .logo-wrapper {
     display: none;
   }
+  .coin-wrapper {
+    margin-right: 10px;
+  }
 }
 
 @media screen and (min-width: 760px) {
-  .login-button,
-  .credits-div {
+  .login-button {
     min-width: 120px;
     font-size: 1em;
   }
-  .register-button,
-  .credits-div {
+  .register-button {
     min-width: 140px;
+    font-size: 1em;
+  }
+  .credits-div {
+    max-width: 70px;
     font-size: 1em;
   }
   .logo-wrapper {
     display: block;
+  }
+  .coin-wrapper {
+    margin-right: 50px;
+  }
+  .account-div {
+    min-width: 140px;
+    font-size: 1em;
+  }
+  .user-wrapper {
+    margin-right: 30px;
+  }
+  .user-drop-down-wrapper {
+    min-width: 150px;
   }
 }
 
@@ -165,14 +198,20 @@
   fill: gold;
   margin-right: 15px;
 }
-
 .credits-div {
   color: white;
   font-weight: 600;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
-  font-size: 1em;
+  margin-right: 10px;
 }
-
+.buy-coin-button {
+  width: 100px;
+  height: 40px;
+  background-image: linear-gradient(rgb(71, 71, 71), rgb(41, 40, 43));
+  border-radius: 5px;
+  border-color: rgb(46, 45, 45);
+  color: white;
+}
 .account-div {
   font-weight: 700;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
@@ -192,7 +231,6 @@
   background-color: black;
   left: 0;
   top: 50px;
-  min-width: 140px;
   padding-top: 10px;
   padding-bottom: 10px;
 }

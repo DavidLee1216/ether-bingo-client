@@ -1,0 +1,27 @@
+@media screen and (max-width: 630px) {
+  .room-auctions {
+    width: 330px;
+  }
+}
+@media screen and (min-width: 630px) and (max-width: 960px) {
+  .room-auctions {
+    width: 660px;
+  }
+}
+@media screen and (min-width: 960px) {
+  .room-auctions {
+    width: 990px;
+  }
+}
+
+.room-auctions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+}
+
+.room-auctions-row-wrapper {
+  display: flex;
+  justify-content: start;
+  margin-bottom: 30px;
+}

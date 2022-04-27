@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-
+import BuyCoins from "../BuyCoins";
 import { ReactComponent as CoinIcon } from "../../assets/img/coin-stack.svg";
 
 export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
   const [userArrowUp, setuserArrowUp] = useState(false);
+  const [buyCoinHidden, setBuyCoinHidden] = useState(true);
   const userArrowWrapperRef = useRef();
   const user = JSON.parse(localStorage.user);
+  const location = useLocation();
 
   const handleOverUserArrow = (e) => {
     setuserArrowUp((prev) => !prev);
@@ -16,6 +18,16 @@ export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
   const handleLeaveUserArrow = (e) => {
     setuserArrowUp(false);
   };
+  const handleModalShow = () => {
+    if (location.pathname === "/buycoin") {
+      return;
+    }
+    setBuyCoinHidden(false);
+  };
+  const handleModalClose = () => {
+    setBuyCoinHidden(true);
+  };
+
   const handleClick = (e) => {
     if (
       e.target !== userArrowWrapperRef.current &&
@@ -32,9 +44,12 @@ export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
   }, []);
   return (
     <UserWrapper>
-      <CoinWrapper>
+      <CoinWrapper className="coin-wrapper">
         <CoinIcon className="coin-icon" width={30} height={30}></CoinIcon>
         <div className="credits-div">{userCoinState.amount}</div>
+        <button className="buy-coin-button" onClick={handleModalShow}>
+          Buy Coin
+        </button>
       </CoinWrapper>
 
       <UsernameWrapper
@@ -45,7 +60,7 @@ export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
       >
         <div className="account-div">{user ? user.username : ""}</div>
         <ArrowDropDownIcon
-          className={`arrow me-3 ${userArrowUp ? "hidden" : "show"}`}
+          className={`arrow ${userArrowUp ? "hidden" : "show"}`}
         ></ArrowDropDownIcon>
         <div className={`user-items ${userArrowUp ? "" : "hidden"}`}>
           <UserDropdownWrapper className="user-drop-down-wrapper">
@@ -53,7 +68,7 @@ export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
               Profile
             </NavLink>
             <NavLink className="navlink" to="/transaction">
-              My Transaction
+              Transactions
             </NavLink>
             <NavLink className="navlink" to="/buycoin">
               Buy Coin
@@ -64,6 +79,10 @@ export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
           </UserDropdownWrapper>
         </div>
       </UsernameWrapper>
+      <BuyCoins
+        hidden={buyCoinHidden}
+        closeClicked={handleModalClose}
+      ></BuyCoins>
     </UserWrapper>
   );
 }
@@ -80,8 +99,6 @@ const CoinWrapper = styled.div`
 const UsernameWrapper = styled.div`
   .account-div {
     text-align: center;
-    margin-left: 20px;
-    margin-right: 10px;
   }
   .arrow {
     transition: 0.25s ease-in-out;

@@ -12,8 +12,6 @@ import LoadingIndicator from "../../utils/loading";
 import { login as authLogin } from "../../store/actions/authActions";
 import { getCredits } from "../../store/actions/userActions";
 
-import axios from "axios";
-
 import "./login.css";
 
 function Login({ hidden, closeClicked, gotoSignUp, signed }) {

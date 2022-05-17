@@ -35,7 +35,8 @@ export const getCredits = () => (dispatch) => {
     };
     getCoins(data)
       .then((response) => {
-        const amount = response.data.coin;
+        let amount = response.data.coin;
+        if (response.status === 204) amount = 0;
         dispatch(CheckCoins(amount));
       })
       .catch((error) => {});

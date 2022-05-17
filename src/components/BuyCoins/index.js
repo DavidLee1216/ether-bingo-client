@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import LoadingIndicator from "../../utils/loading";
 import { ethers, utils } from "ethers";
@@ -20,7 +20,8 @@ function BuyCoins({ hidden, closeClicked }) {
   const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
   const contractABI = abi.abi;
   const coinPrice = 0.001;
-  const user = JSON.parse(localStorage.user);
+  const authUserState = useSelector((state) => state.AuthReducer.authUser);
+  const user = authUserState.user;
 
   const handleClose = (e) => {
     closeClicked();

@@ -4,12 +4,13 @@ import styled from "styled-components";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import BuyCoins from "../BuyCoins";
 import { ReactComponent as CoinIcon } from "../../assets/img/coin-stack.svg";
+import { AUTH_LOGIN } from "../../store/actions/authActions/types";
 
 export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
   const [userArrowUp, setuserArrowUp] = useState(false);
   const [buyCoinHidden, setBuyCoinHidden] = useState(true);
   const userArrowWrapperRef = useRef();
-  const user = JSON.parse(localStorage.user);
+  // const user = JSON.parse(localStorage.user);
   const location = useLocation();
 
   const handleOverUserArrow = (e) => {
@@ -58,7 +59,11 @@ export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
         ref={userArrowWrapperRef}
         // onMouseLeave={handleLeaveUserArrow}
       >
-        <div className="account-div">{user ? user.username : ""}</div>
+        <div className="account-div">
+          {authUserState.authState === AUTH_LOGIN
+            ? authUserState.user.username
+            : ""}
+        </div>
         <ArrowDropDownIcon
           className={`arrow ${userArrowUp ? "hidden" : "show"}`}
         ></ArrowDropDownIcon>
@@ -79,10 +84,14 @@ export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
           </UserDropdownWrapper>
         </div>
       </UsernameWrapper>
-      <BuyCoins
-        hidden={buyCoinHidden}
-        closeClicked={handleModalClose}
-      ></BuyCoins>
+      {buyCoinHidden === false ? (
+        <BuyCoins
+          hidden={buyCoinHidden}
+          closeClicked={handleModalClose}
+        ></BuyCoins>
+      ) : (
+        <></>
+      )}
     </UserWrapper>
   );
 }

@@ -1,0 +1,74 @@
+.bingo_game {
+  width: 200px;
+  height: 220px;
+  background-color: black;
+  border-radius: 20px;
+  margin: 15px;
+  /* box-shadow: 0 4px 8px 0 rgba(0, 255, 255, 0.2),
+    0 6px 20px 0 rgba(0, 255, 255, 0.19); */
+  box-shadow: 2px 2px 3px 1px rgba(222, 222, 228, 0.2),
+    -2px -2px 3px 1px rgba(222, 222, 228, 0.2);
+  cursor: pointer;
+}
+
+.bingo_item {
+  color: white;
+  padding-left: 10px;
+  padding-top: 5px;
+  font-size: 1em;
+}
+
+.room_owner {
+  color: white;
+  padding-left: 10px;
+  padding-top: 5px;
+  font-size: 1em;
+}
+
+.player_count {
+  color: white;
+  padding-left: 10px;
+  padding-top: 5px;
+  font-size: 1em;
+  text-align: center;
+}
+.player_count_count {
+  color: skyblue;
+  font-size: 1.5em;
+  font-weight: 400;
+}
+.player_count_players {
+  color: white;
+}
+.step {
+  color: red;
+  padding-left: 10px;
+  padding-top: 5px;
+  font-size: 1.5em;
+  font-weight: 400;
+  text-align: center;
+}
+
+.time_to_next {
+  color: white;
+  padding-left: 10px;
+  padding-top: 5px;
+  font-size: 1em;
+  text-align: center;
+}
+
+.price {
+  color: white;
+  padding-left: 10px;
+  padding-top: 5px;
+  font-size: 1em;
+  text-align: center;
+}
+.price_value {
+  color: gold;
+  font-size: 1.5em;
+  font-weight: 400;
+}
+.price_credit {
+  color: white;
+}

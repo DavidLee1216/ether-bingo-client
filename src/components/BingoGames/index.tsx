@@ -1,6 +1,15 @@
 import PropTypes from "prop-types";
-import React, { useState, useEffect, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useLayoutEffect,
+} from "react";
+import { useNavigate } from "react-router-dom";
+import BingoItem from "../BingoGame";
 import { padLeft } from "../../utils/common";
+import { getBingoGamesInfo } from "../../services/bingo.service";
 import styles from "./bingogames.module.css";
 
 type Props = {
@@ -12,50 +21,70 @@ type Props = {
   price: number;
 };
 
-function BingoItem({
-  id,
-  owner,
-  player_count,
-  step_type,
-  time_left,
-  price,
-}: Props) {
-  let left_time_str: string =
-    padLeft(Math.floor(time_left / 60)) + ":" + padLeft(time_left % 60);
-
-  return (
-    <div>
-      <div className={styles.bingo_item}>room id #{id}</div>
-      <div className={styles.room_owner}>owner: {owner}</div>
-      <div className={styles.player_count}>players: {player_count}</div>
-      <div className={styles.step}>step: {step_type}</div>
-      <div className={styles.time_to_next}>left time: {left_time_str}</div>
-      <div className={styles.price}>price: {price} coin</div>
-    </div>
-  );
-}
-
-BingoItem.protoTypes = {
-  id: PropTypes.number,
-  owner: PropTypes.string,
-  player_count: PropTypes.number,
-  step_type: PropTypes.string,
-  time_left: PropTypes.number,
-  price: PropTypes.number,
-};
-
 function BingoGames() {
-  useEffect(() => {});
+  const [data, setData] = useState<Props[][]>([]);
+  const [width, setWidth] = useState(window.innerWidth);
+  let row_count = width < 460 ? 1 : width < 690 ? 2 : width < 930 ? 3 : 4;
+  const timer = useRef<ReturnType<typeof setInterval>>();
+  const getData = () => {
+    getBingoGamesInfo()
+      .then(
+        (response) => {
+          let d = [];
+          for (let i = 0; i < response.data.data.length; i += row_count)
+            d.push(response.data.data.slice(i, i + row_count));
+          setData(d);
+        }
+        // (error) => {}
+      )
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  const displayData = () => {
+    getData();
+  };
+  const setTimerInterval = () => {
+    timer.current = setInterval(displayData, 1000);
+  };
+
+  const handleResize = () => {
+    setWidth(window.innerWidth);
+    row_count =
+      window.innerWidth < 460
+        ? 1
+        : window.innerWidth < 690
+        ? 2
+        : window.innerWidth < 930
+        ? 3
+        : 4;
+  };
+
+  useLayoutEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    setTimerInterval();
+    return () => {
+      clearInterval(timer.current);
+    };
+  }, []);
+
   return (
     <div>
-      <BingoItem
-        id={1}
-        owner="owner"
-        player_count={10}
-        step_type="selling"
-        time_left={560}
-        price={2}
-      ></BingoItem>
+      <div className={`${styles.bingo_games} mx-auto`}>
+        {data.map((row, idx) => (
+          <div className={`${styles.bingo_games_row_wrapper}`} key={idx}>
+            {row.map((value) => (
+              <BingoItem data={value}></BingoItem>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

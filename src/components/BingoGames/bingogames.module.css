@@ -1,0 +1,34 @@
+@media screen and (max-width: 460px) {
+  .bingo_games {
+    width: 230px;
+  }
+}
+@media screen and (min-width: 460px) and (max-width: 690px) {
+  .bingo_games {
+    width: 460px;
+  }
+}
+@media screen and (min-width: 690px) and (max-width: 920px) {
+  .bingo_games {
+    width: 690px;
+  }
+}
+@media screen and (min-width: 920px) {
+  .bingo_games {
+    width: 920px;
+  }
+}
+
+.bingo_games {
+  /* display: flex; */
+  min-height: 400px;
+  /* flex-wrap: wrap; */
+  /* justify-content: flex-start; */
+}
+
+.bingo_games_row_wrapper {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: row;
+  margin-bottom: 30px;
+}

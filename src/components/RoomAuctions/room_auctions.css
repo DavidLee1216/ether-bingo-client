@@ -16,12 +16,13 @@
 
 .room-auctions {
   display: flex;
+  min-height: 400px;
   flex-wrap: wrap;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .room-auctions-row-wrapper {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   margin-bottom: 30px;
 }

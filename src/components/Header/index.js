@@ -124,7 +124,7 @@ function Header() {
           </button>
           <HeaderLogo></HeaderLogo>
         </div>
-        {!localStorage.user ? (
+        {authUserState.authState !== AUTH_LOGIN ? (
           <LoginWrapper>
             <button className="login-button" onClick={handleLogin}>
               Log in

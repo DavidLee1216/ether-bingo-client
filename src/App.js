@@ -11,8 +11,10 @@ import Footer from "./components/Footer";
 import AuthenticationPage from "./pages/AuthenticationPage";
 import BuyCoinPage from "./pages/BuyCoinPage";
 import RoomAuctionPage from "./pages/RoomAuctionPage";
+import BingoGamePage from "./pages/BingoGamePage";
 
 const store = Store();
+
 function App() {
   return (
     <Provider store={store}>
@@ -26,6 +28,7 @@ function App() {
           <Route path="/auth" element={<AuthenticationPage />} />
           <Route path="/auth/:id/:key" element={<AuthenticationPage />} />
           <Route path="/room_auction/:room_id" element={<RoomAuctionPage />} />
+          <Route path="/bingo/:room_id" element={<BingoGamePage />} />
         </Routes>
       </BrowserRouter>
     </Provider>

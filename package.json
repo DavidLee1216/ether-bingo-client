@@ -65,6 +65,7 @@
     ]
   },
   "devDependencies": {
+    "@expo/webpack-config": "^0.16.24",
     "hardhat": "^2.9.3",
     "http-proxy-middleware": "^2.0.4",
     "redux-devtools-extension": "^2.13.9"

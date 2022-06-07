@@ -1,5 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+
 .bingo_game_page {
   background-color: rgb(12, 34, 56);
   min-width: 100%;
   min-height: 100vh;
+}
+
+.game_info {
+  display: inline-block;
+  width: 480px;
+}
+
+.user_info {
+  display: inline-block;
+  width: 480px;
+}
+
+.room_info {
+  display: flex;
+  min-height: 40px;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: large;
+  font-weight: 600;
+  background-image: linear-gradient(rgb(20, 20, 20), rgb(41, 40, 43));
+}
+
+.room_info .room_id_title,
+.room_price_title,
+.room_owner_title {
+  font-size: 1rem;
+  font-weight: 400;
+  color: white;
+}
+
+.room_id_value {
+  margin-left: 10px;
+  color: rgb(51, 132, 214);
+}
+
+.room_price_value {
+  margin-left: 10px;
+  color: gold;
+}
+
+.room_owner_value {
+  margin-left: 10px;
+  color: rgb(51, 214, 124);
+}
+
+.game_status_buy {
+  display: flex;
+  min-height: 40px;
+  justify-content: space-evenly;
+  align-items: center;
+  font-size: large;
+  font-weight: 600;
+  background-image: linear-gradient(rgb(20, 20, 20), rgb(41, 40, 43));
+}
+
+.game_status {
+  font-size: 1.5rem;
+  font-weight: 500;
+  font-family: "Lobster", cursive;
+}
+
+.game_status.no_calling {
+  color: rgb(53, 238, 53);
+}
+.game_status.calling {
+  color: red;
+}
+.buy_tickets {
+  color: white;
+  background-image: linear-gradient(rgb(7, 70, 130), rgb(5, 46, 85));
+  padding-left: 10px;
+  padding-right: 10px;
+  cursor: pointer;
 }

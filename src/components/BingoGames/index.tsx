@@ -80,7 +80,7 @@ function BingoGames() {
         {data.map((row, idx) => (
           <div className={`${styles.bingo_games_row_wrapper}`} key={idx}>
             {row.map((value) => (
-              <BingoItem data={value}></BingoItem>
+              <BingoItem data={value} key={value.id}></BingoItem>
             ))}
           </div>
         ))}

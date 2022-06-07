@@ -1,0 +1,24 @@
+.checkBox {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.checkBox input[type="checkbox"] + i {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  background-color: white;
+  border: 3px solid #707070;
+  position: relative;
+}
+
+input[type="checkbox"]:checked + i::after {
+  content: "✔";
+  font-size: 25px;
+  width: 30px;
+  height: 30px;
+  /* text-align: center; */
+  position: absolute;
+  left: -5px;
+  top: -5px;
+}

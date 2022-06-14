@@ -20,10 +20,20 @@ const getBingoTicketRecommendation = (data) => {
   return axios.post("/api/game/bingo/get_bingo_tickets/");
 };
 
+const getBingoMyTickets = (data) => {
+  return axios.post("/api/game/bingo/get_my_bingo_tickets/", data);
+};
+
+const getBingoGamePlayerInfo = (data) => {
+  return axios.post("/api/game/bingo/get_bingo_game_player_info/", data);
+};
+
 export {
   getBingoGamesInfo,
   getBingoGameInfo,
   bingoBuyTicket,
   getBingoGameGeneralInfo,
   getBingoTicketRecommendation,
+  getBingoMyTickets,
+  getBingoGamePlayerInfo,
 };

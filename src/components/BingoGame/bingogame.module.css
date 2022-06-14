@@ -1,6 +1,6 @@
 .bingo_game {
   width: 200px;
-  height: 220px;
+  height: 250px;
   background-color: black;
   border-radius: 20px;
   margin: 15px;
@@ -25,19 +25,22 @@
   font-size: 1em;
 }
 
-.player_count {
+.player_count,
+.tickets_count {
   color: white;
   padding-left: 10px;
   padding-top: 5px;
   font-size: 1em;
   text-align: center;
 }
-.player_count_count {
+.player_count_count,
+.tickets_count_count {
   color: skyblue;
   font-size: 1.5em;
   font-weight: 400;
 }
-.player_count_players {
+.player_count_players,
+.tickets_count_tickets {
   color: white;
 }
 .step {
@@ -71,4 +74,8 @@
 }
 .price_credit {
   color: white;
+}
+
+.bingo_my_cards {
+  position: relative;
 }

@@ -26,6 +26,7 @@
   padding-right: 20px;
   background-color: rgba(0, 0, 0, 0);
   z-index: 120;
+  transition: 0.5s;
 }
 
 .recommend_tickets_box_wrapper {
@@ -38,11 +39,21 @@
 
 .recommend_tickets {
   display: flex;
-  transition: 0.2s;
+  transition: 0.8s;
 }
 
 .hidden {
-  display: none !important;
+  /* display: none !important; */
+  visibility: hidden;
+  width: 0;
+  height: 0;
+}
+
+.recommend_tickets_anim {
+  transition: 1s;
+}
+.recommend_tickets_anim.recommend_hidden {
+  transform: scaleX(0);
 }
 
 .recommend_ticket_wrapper {
@@ -64,6 +75,7 @@
 
 .recommend_ticket {
   display: flex;
+  box-sizing: border-box;
   flex-direction: column;
   background-color: azure;
   padding: 10px;

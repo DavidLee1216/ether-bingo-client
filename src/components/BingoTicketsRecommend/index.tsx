@@ -179,23 +179,29 @@ function BingoTicketsRecommend({
     >
       <Toaster position="top-center" reverseOrder={false} />
       <div
-        className={styles.recommend_tickets_box_wrapper}
+        className={`${styles.recommend_tickets_box_wrapper}`}
         // onClick={(e) => e.stopPropagation()}
       >
         <div
-          className={styles.recommend_tickets}
-          ref={TicketsBoxRef}
-          style={{ transform: `translateX(${ticketsMove}px)` }}
+          className={`${styles.recommend_tickets_anim} ${
+            hidden ? styles.recommend_hidden : ""
+          }`}
         >
-          {ticketData.map((ticket, index) => (
-            <BingoTicket
-              ticket={ticket}
-              key={index}
-              idx={index}
-              checkInit={checkBoxInit}
-              checkClicked={checkClicked}
-            ></BingoTicket>
-          ))}
+          <div
+            className={`${styles.recommend_tickets}`}
+            ref={TicketsBoxRef}
+            style={{ transform: `translateX(${ticketsMove}px)` }}
+          >
+            {ticketData.map((ticket, index) => (
+              <BingoTicket
+                ticket={ticket}
+                key={index}
+                idx={index}
+                checkInit={checkBoxInit}
+                checkClicked={checkClicked}
+              ></BingoTicket>
+            ))}
+          </div>
         </div>
         <div className={styles.go_wrapper}>
           <div

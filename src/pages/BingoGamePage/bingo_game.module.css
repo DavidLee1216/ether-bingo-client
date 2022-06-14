@@ -1,6 +1,33 @@
 @import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fugaz+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap");
+
+/* width */
+.bingo_my_cards::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+.bingo_my_cards::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 5px;
+}
+
+/* Handle */
+.bingo_my_cards::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+.bingo_my_cards::-webkit-scrollbar-thumb:hover {
+  background: rgb(107, 107, 107);
+}
 
 .bingo_game_page {
+  position: relative;
+  display: flex;
   background-color: rgb(12, 34, 56);
   min-width: 100%;
   min-height: 100vh;
@@ -12,8 +39,10 @@
 }
 
 .user_info {
+  position: absolute;
   display: inline-block;
-  width: 480px;
+  left: 480px;
+  right: 20px;
 }
 
 .room_info {
@@ -77,4 +106,229 @@
   padding-left: 10px;
   padding-right: 10px;
   cursor: pointer;
+}
+
+.bingo_my_cards {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+  overflow: auto;
+}
+
+.bingo_users {
+  margin-top: 2rem;
+}
+
+.winner_income {
+  text-align: center;
+  color: white;
+  font-size: 1.6rem;
+}
+
+.winner_income_value {
+  color: gold;
+  margin-left: 1.2em;
+  font-size: 1.2em;
+  font-weight: 500;
+}
+
+.winner_income_eth_unit {
+  color: cyan;
+  font-size: medium;
+}
+
+.all_player_info {
+  margin-top: 1.5rem;
+}
+
+.all_player_title {
+  text-align: center;
+  color: cornflowerblue;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.all_player_list {
+  display: table;
+  width: 100%;
+  padding: 20px;
+  font-size: 1.2rem;
+}
+
+.one_player_info_header {
+  margin-bottom: 1.5em;
+  line-height: 2em !important;
+}
+
+.one_player_info_header_name {
+  display: table-cell;
+  text-align: center;
+  color: cornflowerblue;
+}
+.one_player_info_header_count {
+  display: table-cell;
+  text-align: center;
+  color: cornflowerblue;
+}
+
+.one_player_info_header,
+.one_player_info {
+  display: table-row;
+  width: 100%;
+  padding: 2px 20px;
+  line-height: 1.5em;
+  color: white;
+}
+
+.player_name {
+  display: table-cell;
+  text-align: center;
+}
+
+.player_card_count {
+  display: table-cell;
+  text-align: center;
+}
+
+.called_numbers {
+  display: grid;
+  padding: 0 20px;
+  /* grid-auto-flow: column; */
+  grid-template-columns: repeat(auto-fill, 40px);
+  grid-auto-rows: 40px;
+  gap: 10px;
+}
+
+.called_number {
+  background-color: rgba(88, 88, 88, 0.8);
+  color: white;
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: 40px;
+  box-shadow: 1px 1px 2px 2px rgb(58, 58, 58);
+}
+
+.called_count {
+  font-size: 1.4rem;
+  text-align: center;
+  color: rgb(51, 132, 214);
+  line-height: 60px;
+  font-weight: 700;
+}
+
+.called_string {
+  color: white;
+}
+
+.last_number {
+  color: red;
+  font-size: 5rem;
+  font-family: "Fugaz One", cursive;
+  width: 5rem;
+  text-align: center;
+  margin: 0 auto;
+  text-shadow: -1px -1px 0 greenyellow, 1px -1px 0 greenyellow,
+    -1px 1px 0 greenyellow, 1px 1px 0 greenyellow;
+  /* animation-name: last_number_animation; */
+  animation-duration: 3s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes last_number_animation {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(2);
+  }
+  40% {
+    transform: scale(3);
+  }
+  80% {
+    transform: scale(3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.bingo_interesting_my_ticket {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.winners_component {
+  display: flex;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0);
+  z-index: 10;
+
+  /* animation-name: winners_component_animation; */
+  animation-duration: 8s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
+}
+.winners_component.winners_hidden {
+  transform: translateY(-100%);
+  /* transform: scale(1); */
+  /* visibility: hidden; */
+}
+
+.winner_data_wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: black;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.winner_data {
+  border: 1px solid rgb(46, 46, 46);
+}
+
+@keyframes winners_component_animation {
+  0% {
+    transform: translateY(-100%);
+    opacity: 1;
+  }
+  10% {
+    transform: translateY(-70%);
+    opacity: 1;
+  }
+  20% {
+    transform: translateY(0);
+  }
+  90% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) translateY(-100%);
+    opacity: 0;
+  }
+}
+
+.winner_username {
+  font-size: 2rem;
+  font-family: "Caveat", cursive;
+  color: greenyellow;
+  text-align: center;
+}
+
+.winner_earning {
+  color: white;
+  text-align: center;
+}
+
+.winner_earning_value {
+  color: gold;
 }

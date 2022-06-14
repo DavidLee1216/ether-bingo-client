@@ -4,11 +4,15 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { padLeft } from "../../utils/common";
 import styles from "./bingogame.module.css";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/reducers";
+import { AUTH_LOGIN } from "../../store/actions/authActions/types";
 
 type Props = {
   id: number;
   owner: string;
   player_count: number;
+  card_count: number;
   step_type: string;
   time_left: number;
   price: number;
@@ -20,8 +24,15 @@ type DataType = {
 
 function BingoItem({ data }: DataType) {
   const navigate = useNavigate();
+  const authUserState = useSelector(
+    (state: RootState) => state.AuthReducer.authUser
+  );
 
   const getIntoOneGame = () => {
+    if (authUserState.authState !== AUTH_LOGIN) {
+      toast.error("Please log in and charge coins to bid");
+      return;
+    }
     navigate(`/bingo/${data.id}`);
   };
 
@@ -46,6 +57,12 @@ function BingoItem({ data }: DataType) {
         <span className={styles.player_count_count}>{data.player_count}</span>{" "}
         <span className={styles.player_count_players}>
           {data.player_count <= 1 ? "player" : "players"}
+        </span>
+      </div>
+      <div className={styles.tickets_count}>
+        <span className={styles.tickets_count_count}>{data.card_count}</span>
+        <span className={styles.tickets_count_tickets}>
+          {data.card_count <= 1 ? "ticket" : "tickets"}
         </span>
       </div>
       <div className={styles.step}>{data.step_type}</div>

@@ -7,6 +7,8 @@ import {
   getBingoGameGeneralInfo,
   bingoBuyTicket,
   getBingoTicketRecommendation,
+  getBingoMyTickets,
+  getBingoGamePlayerInfo,
 } from "../../services/bingo.service";
 import { RootState } from "../../store/reducers";
 import LoadingIndicator from "../../utils/loading";
@@ -15,12 +17,15 @@ import {
   CheckCoins,
   getCredits,
 } from "../../store/actions/userActions";
-
+import ReactCSSTransitionGroup from "react-transition-group";
 import styles from "./bingo_game.module.css";
+import BingoTicket from "../../components/BingoTicket";
+import crown from "../../assets/img/crown.png";
+import * as BingoActions from "../../store/actions/bingoActions/index";
 
-type UserCardType = {
+type UserCardCount = {
   username: string;
-  numbers: number[];
+  count: number;
 };
 type CardNumbers = {
   numbers: number[];
@@ -29,27 +34,57 @@ type UserCardsType = {
   username: string;
   cards: CardNumbers[];
 };
+type UserCardType = {
+  username: string;
+  card_info: number[];
+};
 type Ticket = {
   ticket: string;
 };
 
-function BingoUsers({ users }: { users: UserCardsType[] }) {
+function BingoUsers({
+  users,
+  price,
+}: {
+  users: UserCardCount[];
+  price: number;
+}) {
+  let total_card_count = users
+    .map((x) => x.count)
+    .reduce((previousValue, currentValue) => previousValue + currentValue, 0);
+  let total_price = total_card_count * price;
+  let winner_eth_income = total_price * 0.85 * 0.001;
+
   return (
     <div className={styles.bingo_users}>
-      {users.map((v_cards, i_cards) => {
-        <div key={i_cards}>
-          <div className={styles.username}>{v_cards.username}</div>
-          <div className={styles.user_cards}>
-            {v_cards.cards.map((v_card, i_card) => {
-              <div className={styles.user_card} key={i_card}>
-                {v_card.numbers.map((v_number, i_number) => {
-                  <div key={i_number}>{v_number}</div>;
-                })}
-              </div>;
-            })}
+      <div className={styles.winner_income}>
+        ⭐⭐⭐ The winner will get
+        <span className={styles.winner_income_value}>
+          {winner_eth_income}
+        </span>{" "}
+        <span className={styles.winner_income_eth_unit}>ETH</span> ⭐⭐⭐
+      </div>
+      <div className={styles.all_player_info}>
+        <div className={styles.all_player_title}>
+          Players of current session
+        </div>
+        <div className={styles.all_player_list}>
+          <div className={styles.one_player_info_header}>
+            <span className={styles.one_player_info_header_name}>
+              player's name
+            </span>
+            <span className={styles.one_player_info_header_count}>
+              number of tickets
+            </span>
           </div>
-        </div>;
-      })}
+          {users.map((user, i_cards) => (
+            <div key={i_cards} className={styles.one_player_info}>
+              <span className={styles.player_name}>{user.username}</span>
+              <span className={styles.player_card_count}>{user.count}</span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -59,40 +94,219 @@ type BingoNumbersType = {
   calledNumbers: number[];
 };
 function BingoNumbers({ numbers }: { numbers: BingoNumbersType }) {
+  const lastRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (lastRef.current) {
+      lastRef.current.style.animationName = styles.last_number_animation;
+      setTimeout(() => {
+        if (lastRef.current) lastRef.current.style.animationName = "null";
+      }, 3000);
+    }
+  }, [numbers.lastNumber]);
+  useEffect(() => {
+    return () => {};
+  }, []);
   return (
     <div className={styles.bingo_numbers_wrapper}>
-      <div className={styles.last_number}>{numbers.lastNumber}</div>
+      <div className={styles.last_number} ref={lastRef}>
+        {numbers.lastNumber !== 0 ? numbers.lastNumber : ""}
+      </div>
+      <div className={styles.called_count}>
+        {numbers.calledNumbers.length}{" "}
+        <span className={styles.called_string}>numbers called</span>
+      </div>
       <div className={styles.called_numbers}>
-        {numbers.calledNumbers.map((v, i) => {
+        {numbers.calledNumbers.map((v, i) => (
           <div className={styles.called_number} key={i}>
             {v}
-          </div>;
-        })}
+          </div>
+        ))}
       </div>
+    </div>
+  );
+}
+
+function BingoMyInterestingTicket({
+  ticket,
+  idx,
+  checkClicked,
+  calledNumbers,
+  lastNumber,
+}: {
+  ticket: number[][][];
+  idx: number;
+  checkClicked: Function;
+  calledNumbers: number[];
+  lastNumber: number;
+}) {
+  return (
+    <div className={styles.bingo_interesting_my_ticket}>
+      <BingoTicket
+        ticket={ticket}
+        idx={idx}
+        checkClicked={checkClicked}
+        calledNumbers={calledNumbers}
+        lastNumber={lastNumber}
+        showBig={true}
+      ></BingoTicket>
     </div>
   );
 }
 
 function BingoMyTickets({
   myTickets,
+  calledNumbers,
+  lastNumber,
 }: {
   myTickets: UserCardsType | undefined;
+  calledNumbers: number[];
+  lastNumber: number;
 }) {
+  const [interestingTicket, setInterestingTicket] = useState(-1);
+
+  let ticketData = [];
+  if (myTickets !== undefined) {
+    for (let i = 0; i < myTickets.cards.length; i++) {
+      let aData = [];
+      for (let j = 0; j < 6; j++) {
+        let aPanel = [];
+        for (let k = 0; k < 3; k++) {
+          let aLine = [];
+          for (let m = 0; m < 9; m++) {
+            let number = myTickets.cards[i].numbers[j * 27 + k * 9 + m];
+            aLine.push(number);
+          }
+          aPanel.push(aLine);
+        }
+        aData.push(aPanel);
+      }
+      ticketData.push(aData);
+    }
+  }
+
+  const checkClicked = (i: number, type: boolean) => {
+    if (type) setInterestingTicket(i);
+  };
+
+  const checkInterestingClicked = (i: number, type: boolean) => {
+    setInterestingTicket(-1);
+  };
+
   return (
     <div className={styles.bingo_my_cards}>
       {myTickets !== undefined ? (
-        myTickets.cards.map((card, card_i) => {
-          <div className={styles.my_card} key={card_i}>
-            {card.numbers.map((v, i) => {
-              <div className={styles.bingo_my_card_value} key={i}>
-                {v}
-              </div>;
-            })}
-          </div>;
-        })
+        ticketData.map((ticket, index) => (
+          <BingoTicket
+            ticket={ticket}
+            key={index}
+            idx={index}
+            checkClicked={checkClicked}
+            calledNumbers={calledNumbers}
+            lastNumber={lastNumber}
+            showBig={false}
+          ></BingoTicket>
+        ))
       ) : (
         <></>
       )}
+      {interestingTicket !== -1 ? (
+        <BingoMyInterestingTicket
+          ticket={ticketData[interestingTicket]}
+          idx={interestingTicket}
+          checkClicked={checkInterestingClicked}
+          calledNumbers={calledNumbers}
+          lastNumber={lastNumber}
+        ></BingoMyInterestingTicket>
+      ) : (
+        ""
+      )}
+    </div>
+  );
+}
+
+function BingoWinners({
+  winners,
+  calledNumbers,
+  lastNumber,
+  hidden,
+}: {
+  winners: UserCardType[];
+  calledNumbers: number[];
+  lastNumber: number;
+  hidden: boolean;
+}) {
+  const winnerComponentRef = useRef<HTMLDivElement>(null);
+  const bingoState = useSelector((state: RootState) => state.BingoReducer);
+  let earning = (bingoState.winner_earning / winners.length).toFixed(5);
+  let winnersData = [];
+  for (let i = 0; i < winners.length; i++) {
+    let aData: {
+      [k: string]: any;
+    } = {};
+    aData.username = winners[i].username;
+    aData.ticket = [];
+    for (let j = 0; j < 6; j++) {
+      let aPanel = [];
+      for (let k = 0; k < 3; k++) {
+        let aLine = [];
+        for (let m = 0; m < 9; m++) {
+          let number = winners[i].card_info[j * 27 + k * 9 + m];
+          aLine.push(number);
+        }
+        aPanel.push(aLine);
+      }
+      aData.ticket.push(aPanel);
+    }
+    winnersData.push(aData);
+  }
+  const checkClicked = (i: number, type: boolean) => {};
+
+  useEffect(() => {
+    if (!hidden) {
+      if (winnerComponentRef.current) {
+        winnerComponentRef.current.style.animationName =
+          styles.winners_component_animation;
+        setTimeout(() => {
+          if (winnerComponentRef.current) {
+            winnerComponentRef.current.style.animationName = "null";
+            winnerComponentRef.current.classList.add(styles.winners_hidden);
+          }
+        }, 8000);
+      }
+    }
+  }, [hidden]);
+
+  return (
+    <div
+      className={`${styles.winners_component} ${
+        hidden ? styles.winners_hidden : ""
+      }`}
+      ref={winnerComponentRef}
+    >
+      <div className={styles.winner_data_wrapper}>
+        {winnersData.map((winner, index) => (
+          <div className={styles.winner_data} key={index}>
+            <div className="d-flex">
+              <div className="mt-1">
+                <img src={crown} width="40" height="40"></img>
+              </div>
+              <div className={styles.winner_username}>{winner.username}</div>
+            </div>
+            <div className={styles.winner_earning}>
+              earning:{" "}
+              <span className={styles.winner_earning_value}>{earning}</span> ETH
+            </div>
+            <BingoTicket
+              ticket={winner.ticket}
+              idx={index}
+              checkClicked={checkClicked}
+              calledNumbers={calledNumbers}
+              lastNumber={lastNumber}
+              showBig={true}
+            ></BingoTicket>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -102,11 +316,13 @@ function BingoGamePage() {
   const [owner, setOwner] = useState("");
   const [price, setPrice] = useState(0);
   const [status, setStatus] = useState("");
-  const [users, setUsers] = useState<UserCardsType[]>([]);
+  const [users, setUsers] = useState<UserCardCount[]>([]);
   const [numbers, setNumbers] = useState({ lastNumber: 0, calledNumbers: [] });
+  const [winners, setWinners] = useState<UserCardType[]>([]);
   const [myTickets, setMyTickets] = useState<UserCardsType>();
   const [recommendedTickets, setRecommendedTickets] = useState<string[]>([]);
   const [modalHidden, setModalHidden] = useState(true);
+  const [winnerHidden, setWinnerHidden] = useState(true);
   const { room_id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -114,6 +330,7 @@ function BingoGamePage() {
   const authUserState = useSelector(
     (state: RootState) => state.AuthReducer.authUser
   );
+  const bingoState = useSelector((state: RootState) => state.BingoReducer);
 
   const timer = useRef<ReturnType<typeof setInterval>>();
 
@@ -124,23 +341,53 @@ function BingoGamePage() {
       ? false
       : true;
   }
-  const rearrangeUsers = (data: UserCardType[]) => {
-    let new_data: UserCardsType[] = [];
-    for (let i = 0; i < data.length; i++) {
-      if (checkInUsersArray(new_data, data[i].username) === false) {
-        let cards: CardNumbers[] = [];
-        let filteredRes = data.filter((e) => {
-          e.username === data[i].username;
-        });
-        for (let j = 0; j < filteredRes.length; j++) {
-          let card: CardNumbers = { numbers: filteredRes[j].numbers };
-          cards.push(card);
-        }
-        new_data.push({ username: data[i].username, cards: cards });
-      }
-    }
-    return new_data;
+  // const rearrangeUsers = (data: UserCardType[]) => {
+  //   let new_data: UserCardsType[] = [];
+  //   for (let i = 0; i < data.length; i++) {
+  //     if (checkInUsersArray(new_data, data[i].username) === false) {
+  //       let cards: CardNumbers[] = [];
+  //       let filteredRes = data.filter((e) => {
+  //         e.username === data[i].username;
+  //       });
+  //       for (let j = 0; j < filteredRes.length; j++) {
+  //         let card: CardNumbers = { numbers: filteredRes[j].numbers };
+  //         cards.push(card);
+  //       }
+  //       new_data.push({ username: data[i].username, cards: cards });
+  //     }
+  //   }
+  //   return new_data;
+  // };
+  const getMyData = () => {
+    if (localStorage.user === null) navigate("/");
+    let user = JSON.parse(localStorage.user);
+    let username = user.username;
+    let data = {
+      room_id: room_id,
+      username: username,
+    };
+    getBingoMyTickets(data)
+      .then((response) => {
+        setMyTickets({ username: username, cards: response.data.data });
+      })
+      .catch((error) => {
+        console.log(error.response);
+      });
   };
+
+  const getPlayerData = () => {
+    let data = {
+      room_id: room_id,
+    };
+    getBingoGamePlayerInfo(data)
+      .then((response) => {
+        setUsers(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const getData = () => {
     let data = {
       room_id: room_id,
@@ -149,19 +396,26 @@ function BingoGamePage() {
       .then((response) => {
         setStatus(response.data.status);
         if (response.data.status === "selling") {
-          let new_data = rearrangeUsers(response.data.data);
-          let my_tickets = new_data.filter(
-            (e) => e.username === authUserState.user.username
-          );
-          if (my_tickets.length > 0) setMyTickets(my_tickets[0]);
-          setUsers(new_data);
+          // let new_data = rearrangeUsers(response.data.data);
+          // let my_tickets = new_data.filter(
+          //   (e) => e.username === authUserState.user.username
+          // );
+          // if (my_tickets.length > 0) setMyTickets(my_tickets[0]);
+          setUsers(response.data.data);
         } else if (response.data.status === "calling") {
           setNumbers({
             lastNumber: response.data.last_number,
             calledNumbers: response.data.called_numbers,
           });
+          dispatch(BingoActions.setCalledNumbers(response.data.called_numbers));
+          dispatch(BingoActions.setLastNumber(response.data.last_number));
         } else if (response.data.status === "ended") {
-          setNumbers({ lastNumber: 0, calledNumbers: [] });
+          setNumbers({
+            lastNumber: response.data.last_number,
+            calledNumbers: response.data.called_numbers,
+          });
+          setWinners(response.data.winners);
+          dispatch(BingoActions.setWinners(response.data.winners));
         }
       })
       .catch((error) => {
@@ -177,7 +431,7 @@ function BingoGamePage() {
   };
 
   const setTimerInterval = () => {
-    timer.current = setInterval(displayData, 100);
+    timer.current = setInterval(displayData, 1000);
   };
 
   const showTicketList = () => {
@@ -205,10 +459,11 @@ function BingoGamePage() {
     };
     setLoading(true);
     bingoBuyTicket(data)
-      .then((response) => {
+      .then(async (response) => {
         setModalHidden(true);
-        setLoading(false);
         dispatch(getCredits());
+        await getMyData();
+        setLoading(false);
         return true;
       })
       .catch((error) => {
@@ -221,17 +476,40 @@ function BingoGamePage() {
   };
 
   useEffect(() => {
+    let total_card_count = users
+      .map((x) => x.count)
+      .reduce((previousValue, currentValue) => previousValue + currentValue, 0);
+
+    dispatch(BingoActions.setTotalCardsCount(total_card_count));
+    dispatch(BingoActions.setWinnerEarning(total_card_count * 0.001 * 0.85));
+  }, [users]);
+
+  useEffect(() => {
+    setWinnerHidden(false);
+    setTimeout(() => {
+      setWinners([]);
+    }, 8000);
+  }, [winners]);
+
+  useEffect(() => {
+    dispatch(BingoActions.setRoom(room_id));
     getBingoGameGeneralInfo({ room_id: room_id })
-      .then((response) => {
+      .then(async (response) => {
         setOwner(response.data.owner);
         setPrice(response.data.price);
+        dispatch(BingoActions.setGamePrice(response.data.price));
       })
       .catch((error) => {});
     setTimerInterval();
     return () => {
       clearInterval(timer.current);
     };
-  });
+  }, []);
+
+  useEffect(() => {
+    getMyData();
+    getPlayerData();
+  }, []);
 
   return (
     <div className={styles.bingo_game_page}>
@@ -272,14 +550,26 @@ function BingoGamePage() {
         </div>
         <BingoNumbers numbers={numbers}></BingoNumbers>
       </div>
-      <BingoMyTickets myTickets={myTickets}></BingoMyTickets>
-      <BingoUsers users={users}></BingoUsers>
+      <div className={styles.user_info}>
+        <BingoMyTickets
+          myTickets={myTickets}
+          calledNumbers={numbers.calledNumbers}
+          lastNumber={numbers.lastNumber}
+        ></BingoMyTickets>
+        <BingoUsers users={users} price={price}></BingoUsers>
+      </div>
       <BingoTicketsRecommend
         data={recommendedTickets}
         hidden={modalHidden}
         closeClicked={handleModalClosed}
         buyClicked={handleBuyTickets}
       ></BingoTicketsRecommend>
+      <BingoWinners
+        winners={winners}
+        calledNumbers={numbers.calledNumbers}
+        lastNumber={numbers.lastNumber}
+        hidden={winnerHidden}
+      ></BingoWinners>
     </div>
   );
 }

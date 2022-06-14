@@ -16,6 +16,7 @@ type Props = {
   id: number;
   owner: string;
   player_count: number;
+  card_count: number;
   step_type: string;
   time_left: number;
   price: number;

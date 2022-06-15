@@ -28,6 +28,14 @@ const getBingoGamePlayerInfo = (data) => {
   return axios.post("/api/game/bingo/get_bingo_game_player_info/", data);
 };
 
+const getBingoGameWinnerHistoryForRoom = (data) => {
+  return axios.post("/api/game/bingo/get_bingo_room_winner_history/", data);
+};
+
+const getBingoRoomOwnerEarning = (data) => {
+  return axios.post("/api/game/bingo/get_room_owner_earning/", data);
+};
+
 export {
   getBingoGamesInfo,
   getBingoGameInfo,
@@ -36,4 +44,6 @@ export {
   getBingoTicketRecommendation,
   getBingoMyTickets,
   getBingoGamePlayerInfo,
+  getBingoGameWinnerHistoryForRoom,
+  getBingoRoomOwnerEarning,
 };

@@ -62,7 +62,7 @@ function BingoItem({ data }: DataType) {
       <div className={styles.tickets_count}>
         <span className={styles.tickets_count_count}>{data.card_count}</span>
         <span className={styles.tickets_count_tickets}>
-          {data.card_count <= 1 ? "ticket" : "tickets"}
+          {data.card_count <= 1 ? " ticket" : " tickets"}
         </span>
       </div>
       <div className={styles.step}>{data.step_type}</div>

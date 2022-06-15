@@ -9,6 +9,8 @@ import {
   getBingoTicketRecommendation,
   getBingoMyTickets,
   getBingoGamePlayerInfo,
+  getBingoGameWinnerHistoryForRoom,
+  getBingoRoomOwnerEarning,
 } from "../../services/bingo.service";
 import { RootState } from "../../store/reducers";
 import LoadingIndicator from "../../utils/loading";
@@ -22,6 +24,11 @@ import styles from "./bingo_game.module.css";
 import BingoTicket from "../../components/BingoTicket";
 import crown from "../../assets/img/crown.png";
 import * as BingoActions from "../../store/actions/bingoActions/index";
+import BingoWinnerHistory, {
+  WinnerDataType,
+} from "../../components/BingoWinnerHistory";
+
+const controller = new AbortController();
 
 type UserCardCount = {
   username: string;
@@ -41,6 +48,10 @@ type UserCardType = {
 type Ticket = {
   ticket: string;
 };
+type OwnerEarning = {
+  earning: string;
+  period: string;
+};
 
 function BingoUsers({
   users,
@@ -57,13 +68,15 @@ function BingoUsers({
 
   return (
     <div className={styles.bingo_users}>
-      <div className={styles.winner_income}>
-        ⭐⭐⭐ The winner will get
-        <span className={styles.winner_income_value}>
-          {winner_eth_income}
-        </span>{" "}
-        <span className={styles.winner_income_eth_unit}>ETH</span> ⭐⭐⭐
-      </div>
+      {total_card_count > 0 && (
+        <div className={styles.winner_income}>
+          ⭐⭐⭐ The winner will get
+          <span className={styles.winner_income_value}>
+            {winner_eth_income}
+          </span>{" "}
+          <span className={styles.winner_income_eth_unit}>ETH</span> ⭐⭐⭐
+        </div>
+      )}
       <div className={styles.all_player_info}>
         <div className={styles.all_player_title}>
           Players of current session
@@ -106,7 +119,7 @@ function BingoNumbers({ numbers }: { numbers: BingoNumbersType }) {
   useEffect(() => {
     return () => {};
   }, []);
-  return (
+  return numbers.calledNumbers.length > 0 ? (
     <div className={styles.bingo_numbers_wrapper}>
       <div className={styles.last_number} ref={lastRef}>
         {numbers.lastNumber !== 0 ? numbers.lastNumber : ""}
@@ -123,6 +136,8 @@ function BingoNumbers({ numbers }: { numbers: BingoNumbersType }) {
         ))}
       </div>
     </div>
+  ) : (
+    <div></div>
   );
 }
 
@@ -224,6 +239,26 @@ function BingoMyTickets({
   );
 }
 
+function BingoOwnerEarning({
+  earning,
+  period,
+}: {
+  earning: string;
+  period: string;
+}) {
+  return (
+    <div className={`${styles.owner_earning} mx-2`} style={{ color: "white" }}>
+      <span>Owner's earning:</span>
+      <span style={{ color: "gold", marginLeft: "10px" }}>{earning}</span>
+      <span style={{ color: "cyan", fontSize: "0.6em" }}>ETH</span>
+      <span style={{ marginLeft: "10px" }}>
+        for{" "}
+        <span style={{ color: "yellow", marginLeft: "10px" }}>{period}</span>
+      </span>
+    </div>
+  );
+}
+
 function BingoWinners({
   winners,
   calledNumbers,
@@ -236,14 +271,18 @@ function BingoWinners({
   hidden: boolean;
 }) {
   const winnerComponentRef = useRef<HTMLDivElement>(null);
+  const authUserState = useSelector((state: RootState) => state.AuthReducer);
   const bingoState = useSelector((state: RootState) => state.BingoReducer);
   let earning = (bingoState.winner_earning / winners.length).toFixed(5);
+  let bYouWon = false;
   let winnersData = [];
   for (let i = 0; i < winners.length; i++) {
     let aData: {
       [k: string]: any;
     } = {};
     aData.username = winners[i].username;
+    if (winners[i].username === authUserState.authUser.user.username)
+      bYouWon = true;
     aData.ticket = [];
     for (let j = 0; j < 6; j++) {
       let aPanel = [];
@@ -262,27 +301,28 @@ function BingoWinners({
   const checkClicked = (i: number, type: boolean) => {};
 
   useEffect(() => {
-    if (!hidden) {
+    if (!hidden && winners.length > 0) {
       if (winnerComponentRef.current) {
         winnerComponentRef.current.style.animationName =
           styles.winners_component_animation;
-        setTimeout(() => {
+        let timer = setTimeout(() => {
           if (winnerComponentRef.current) {
             winnerComponentRef.current.style.animationName = "null";
             winnerComponentRef.current.classList.add(styles.winners_hidden);
           }
-        }, 8000);
+          clearTimeout(timer);
+        }, 7800);
       }
     }
   }, [hidden]);
 
-  return (
-    <div
-      className={`${styles.winners_component} ${
-        hidden ? styles.winners_hidden : ""
-      }`}
-      ref={winnerComponentRef}
-    >
+  return hidden ? (
+    <div></div>
+  ) : (
+    <div className={`${styles.winners_component}`} ref={winnerComponentRef}>
+      {bYouWon && (
+        <div className={styles.winner_you_won}>Conguratulations! You won!</div>
+      )}
       <div className={styles.winner_data_wrapper}>
         {winnersData.map((winner, index) => (
           <div className={styles.winner_data} key={index}>
@@ -323,6 +363,11 @@ function BingoGamePage() {
   const [recommendedTickets, setRecommendedTickets] = useState<string[]>([]);
   const [modalHidden, setModalHidden] = useState(true);
   const [winnerHidden, setWinnerHidden] = useState(true);
+  const [winnersHistory, setWinnersHistory] = useState<WinnerDataType[]>([]);
+  const [ownerEarning, setOwnerEarning] = useState<OwnerEarning>({
+    earning: "0",
+    period: "",
+  });
   const { room_id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -341,23 +386,6 @@ function BingoGamePage() {
       ? false
       : true;
   }
-  // const rearrangeUsers = (data: UserCardType[]) => {
-  //   let new_data: UserCardsType[] = [];
-  //   for (let i = 0; i < data.length; i++) {
-  //     if (checkInUsersArray(new_data, data[i].username) === false) {
-  //       let cards: CardNumbers[] = [];
-  //       let filteredRes = data.filter((e) => {
-  //         e.username === data[i].username;
-  //       });
-  //       for (let j = 0; j < filteredRes.length; j++) {
-  //         let card: CardNumbers = { numbers: filteredRes[j].numbers };
-  //         cards.push(card);
-  //       }
-  //       new_data.push({ username: data[i].username, cards: cards });
-  //     }
-  //   }
-  //   return new_data;
-  // };
   const getMyData = () => {
     if (localStorage.user === null) navigate("/");
     let user = JSON.parse(localStorage.user);
@@ -388,6 +416,32 @@ function BingoGamePage() {
       });
   };
 
+  const getWinnersData = () => {
+    let data = { room_id: room_id };
+    getBingoGameWinnerHistoryForRoom(data)
+      .then((response) => {
+        let winners_data = response.data.data;
+        for (let i = 0; i < winners_data.length; i++) {
+          let date = new Date(winners_data[i].time);
+          winners_data[i].time = date.toLocaleString();
+        }
+        setWinnersHistory(winners_data);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+  };
+  const getRoomOwnerEarning = () => {
+    let data = { room_id: room_id };
+    getBingoRoomOwnerEarning(data)
+      .then((response) => {
+        if (response.data.status == 200) setOwnerEarning(response.data.data);
+        else setOwnerEarning({ earning: "0", period: "" });
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+  };
   const getData = () => {
     let data = {
       room_id: room_id,
@@ -396,11 +450,7 @@ function BingoGamePage() {
       .then((response) => {
         setStatus(response.data.status);
         if (response.data.status === "selling") {
-          // let new_data = rearrangeUsers(response.data.data);
-          // let my_tickets = new_data.filter(
-          //   (e) => e.username === authUserState.user.username
-          // );
-          // if (my_tickets.length > 0) setMyTickets(my_tickets[0]);
+          setWinnerHidden(true);
           setUsers(response.data.data);
         } else if (response.data.status === "calling") {
           setNumbers({
@@ -414,7 +464,11 @@ function BingoGamePage() {
             lastNumber: response.data.last_number,
             calledNumbers: response.data.called_numbers,
           });
+          dispatch(BingoActions.setCalledNumbers(response.data.called_numbers));
+          dispatch(BingoActions.setLastNumber(response.data.last_number));
           setWinners(response.data.winners);
+          setWinnerHidden(false);
+
           dispatch(BingoActions.setWinners(response.data.winners));
         }
       })
@@ -485,10 +539,20 @@ function BingoGamePage() {
   }, [users]);
 
   useEffect(() => {
-    setWinnerHidden(false);
-    setTimeout(() => {
-      setWinners([]);
-    }, 8000);
+    if (winners.length > 0) {
+      if (winnerHidden) {
+        setWinnerHidden(false);
+        let timer = setTimeout(() => {
+          setWinners([]);
+          setNumbers({ lastNumber: 0, calledNumbers: [] });
+          getWinnersData();
+          setWinnerHidden(true);
+          getRoomOwnerEarning();
+          getMyData();
+          clearTimeout(timer);
+        }, 11000);
+      }
+    }
   }, [winners]);
 
   useEffect(() => {
@@ -503,12 +567,15 @@ function BingoGamePage() {
     setTimerInterval();
     return () => {
       clearInterval(timer.current);
+      controller.abort();
     };
   }, []);
 
   useEffect(() => {
     getMyData();
     getPlayerData();
+    getWinnersData();
+    getRoomOwnerEarning();
   }, []);
 
   return (
@@ -529,6 +596,12 @@ function BingoGamePage() {
             <span className={styles.room_owner_value}>{owner}</span>
           </div>
         </div>
+        {owner !== "" && (
+          <BingoOwnerEarning
+            earning={ownerEarning.earning}
+            period={ownerEarning.period}
+          ></BingoOwnerEarning>
+        )}
         <div className={`${styles.game_status_buy} ms-2 mt-1`}>
           <div
             className={`${styles.game_status} ${
@@ -548,9 +621,12 @@ function BingoGamePage() {
             <></>
           )}
         </div>
-        <BingoNumbers numbers={numbers}></BingoNumbers>
+        {status !== "selling" && (
+          <BingoNumbers numbers={numbers}></BingoNumbers>
+        )}
       </div>
       <div className={styles.user_info}>
+        <BingoWinnerHistory winners={winnersHistory}></BingoWinnerHistory>
         <BingoMyTickets
           myTickets={myTickets}
           calledNumbers={numbers.calledNumbers}

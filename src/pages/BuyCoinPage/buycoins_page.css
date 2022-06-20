@@ -1,14 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Secular+One&display=swap");
 
 .buycoin {
-  background-color: antiquewhite;
+  background-color: rgb(12, 34, 56);
   height: 100vh;
 }
 .buycoin-title {
   font-family: "Secular One", sans-serif;
   font-size: 3em;
   font-weight: 900;
-  color: black;
+  color: blanchedalmond;
   margin-top: 50px;
   margin-bottom: 30px;
 }
@@ -25,7 +25,7 @@
 .coin-amount-caption,
 .coin-amount-value {
   height: 40px;
-  color: black;
+  color: white;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   font-size: 1.2em;
 }

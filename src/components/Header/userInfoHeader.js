@@ -5,10 +5,17 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import BuyCoins from "../BuyCoins";
 import { ReactComponent as CoinIcon } from "../../assets/img/coin-stack.svg";
 import { AUTH_LOGIN } from "../../store/actions/authActions/types";
+import PayForOwnership from "../PayForOwnership";
 
-export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
+export default function UserInfoNav({
+  authUserState,
+  userCoinState,
+  roomOwnerState,
+  logOut,
+}) {
   const [userArrowUp, setuserArrowUp] = useState(false);
   const [buyCoinHidden, setBuyCoinHidden] = useState(true);
+  const [payForOwnershipHidden, setPayForOwnershipHidden] = useState(true);
   const userArrowWrapperRef = useRef();
   // const user = JSON.parse(localStorage.user);
   const location = useLocation();
@@ -25,17 +32,16 @@ export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
     }
     setBuyCoinHidden(false);
   };
+  const handlePayOwnership = () => {
+    setPayForOwnershipHidden(false);
+  };
   const handleModalClose = () => {
     setBuyCoinHidden(true);
+    setPayForOwnershipHidden(true);
   };
 
   const handleClick = (e) => {
-    if (
-      e.target !== userArrowWrapperRef.current &&
-      e.target.parentElement !== userArrowWrapperRef.current
-    ) {
-      setuserArrowUp(false);
-    }
+    setuserArrowUp(false);
   };
   useEffect(() => {
     window.addEventListener("click", handleClick);
@@ -51,39 +57,46 @@ export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
         <button className="buy-coin-button" onClick={handleModalShow}>
           Buy Coin
         </button>
+        {roomOwnerState.won_rooms.length > 0 && (
+          <button className="pay-for-room-button" onClick={handlePayOwnership}>
+            Pay for ownership
+          </button>
+        )}
       </CoinWrapper>
 
-      <UsernameWrapper
-        className="user-wrapper"
-        onClick={handleOverUserArrow}
-        ref={userArrowWrapperRef}
-        // onMouseLeave={handleLeaveUserArrow}
-      >
-        <div className="account-div">
-          {authUserState.authState === AUTH_LOGIN
-            ? authUserState.user.username
-            : ""}
-        </div>
-        <ArrowDropDownIcon
-          className={`arrow ${userArrowUp ? "hidden" : "show"}`}
-        ></ArrowDropDownIcon>
-        <div className={`user-items ${userArrowUp ? "" : "hidden"}`}>
-          <UserDropdownWrapper className="user-drop-down-wrapper">
-            <NavLink className="navlink" to="/profile">
-              Profile
-            </NavLink>
-            <NavLink className="navlink" to="/transaction">
-              Transactions
-            </NavLink>
-            <NavLink className="navlink" to="/buycoin">
-              Buy Coin
-            </NavLink>
-            <a className="navlink" href="/" onClick={logOut}>
-              Logout
-            </a>
-          </UserDropdownWrapper>
-        </div>
-      </UsernameWrapper>
+      <div onClick={(e) => e.stopPropagation()}>
+        <UsernameWrapper
+          className="user-wrapper"
+          onClick={handleOverUserArrow}
+          ref={userArrowWrapperRef}
+          // onMouseLeave={handleLeaveUserArrow}
+        >
+          <div className="account-div">
+            {authUserState.authState === AUTH_LOGIN
+              ? authUserState.user.username
+              : ""}
+          </div>
+          <ArrowDropDownIcon
+            className={`arrow ${userArrowUp ? "hidden" : "show"}`}
+          ></ArrowDropDownIcon>
+          <div className={`user-items ${userArrowUp ? "" : "hidden"}`}>
+            <UserDropdownWrapper className="user-drop-down-wrapper">
+              <NavLink className="navlink" to="/profile">
+                Profile
+              </NavLink>
+              <NavLink className="navlink" to="/transaction">
+                Transactions
+              </NavLink>
+              <NavLink className="navlink" to="/buycoin">
+                Buy Coin
+              </NavLink>
+              <a className="navlink" href="/" onClick={logOut}>
+                Logout
+              </a>
+            </UserDropdownWrapper>
+          </div>
+        </UsernameWrapper>
+      </div>
       {buyCoinHidden === false ? (
         <BuyCoins
           hidden={buyCoinHidden}
@@ -91,6 +104,9 @@ export default function UserInfoNav({ authUserState, userCoinState, logOut }) {
         ></BuyCoins>
       ) : (
         <></>
+      )}
+      {payForOwnershipHidden === false && (
+        <PayForOwnership closeClicked={handleModalClose}></PayForOwnership>
       )}
     </UserWrapper>
   );

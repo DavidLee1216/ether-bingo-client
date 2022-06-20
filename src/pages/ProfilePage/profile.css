@@ -20,11 +20,15 @@
 .country-wrapper,
 .city-wrapper,
 .gender-wrapper,
-.main-wallet-wrapper,
-.wallet-button {
+.main-wallet-wrapper {
   margin-bottom: 30px;
 }
 .save-button {
   width: 120px;
   height: 40px;
+}
+
+.wallet-button {
+  width: 150px;
+  white-space: nowrap;
 }

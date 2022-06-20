@@ -7,6 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import UserService from "../../services/user.service";
 import "./profile.css";
 import LoadingIndicator from "../../utils/loading";
+import abi from "../../contracts/EtherBingo.json";
 
 function ProfilePage() {
   const [loading, setLoading] = useState(false);
@@ -14,9 +15,12 @@ function ProfilePage() {
   const [city, setCity] = useState("");
   const [gender, setGender] = useState("");
   const [wallet, setWallet] = useState("");
+  const [profileExist, setProfileExist] = useState(false);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [error, setError] = useState(null);
   const user = JSON.parse(localStorage.user);
+  const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
+  const contractABI = abi.abi;
 
   const countryOptions = useMemo(() => countryList().getData(), []);
   const genderOptions = [
@@ -44,7 +48,6 @@ function ProfilePage() {
         setIsWalletConnected(true);
         setWallet(account);
         setError(null);
-        console.log("Account Connected: ", account);
       } else {
         setError("Please install a MetaMask wallet to play bingo.");
         console.log("No Metamask detected");
@@ -58,6 +61,7 @@ function ProfilePage() {
   function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
+
   const saveProfile = async (e) => {
     if (country === "") {
       toast.error("Please select coutry");
@@ -75,6 +79,10 @@ function ProfilePage() {
       toast.error("Address is too long");
       return;
     }
+    if (!isWalletConnected) {
+      toast.error("Please connect main wallet");
+      return;
+    }
     let profile = {
       username: user.username,
       country: country.label,
@@ -82,11 +90,34 @@ function ProfilePage() {
       sex: gender.label,
       wallet: wallet,
     };
+    const accounts = await window.ethereum.request({
+      method: "eth_requestAccounts",
+    });
+    const account = accounts[0];
+    if (account !== wallet) {
+      toast.error(
+        "Connected address is different from wallet address. Click connect button and try again."
+      );
+      return;
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const tokenContract = new ethers.Contract(
+      contractAddress,
+      contractABI,
+      signer
+    );
     setLoading(true);
     // await sleep(1000);
     UserService.setProfile(profile).then(
-      (response) => {
-        toast.success("Profile saved successfully.");
+      async (response) => {
+        try {
+          const txn = await tokenContract.setMainWallet(user.id);
+          setProfileExist(true);
+          toast.success("Profile saved successfully.");
+        } catch (error) {
+          toast.error("Error occured while set your wallet");
+        }
       },
       (error) => {
         if (error.response.status === 409) {
@@ -117,6 +148,7 @@ function ProfilePage() {
         setGender(sex);
         setWallet(response.data.main_wallet);
         setIsWalletConnected(true);
+        setProfileExist(true);
       },
       (error) => {
         console.log(error.response.data);
@@ -175,15 +207,17 @@ function ProfilePage() {
         </div>
         <div className="main-wallet-wrapper d-flex">
           <div className="text-white col-4">Main Wallet:</div>
-          <div className="text-white col-7">{wallet}</div>
+          {isWalletConnected && <div className="text-white pe-3">{wallet}</div>}
+          {profileExist === false && (
+            <button
+              className="wallet-button"
+              onClick={checkIfWalletIsConnected}
+            >
+              {isWalletConnected ? "Reconnect Wallet" : "Connect Wallet"}
+            </button>
+          )}
         </div>
-        {!isWalletConnected ? (
-          <button className="wallet-button" onClick={checkIfWalletIsConnected}>
-            {isWalletConnected ? "Wallet Connected 🔒" : "Connect Wallet 🔑"}
-          </button>
-        ) : (
-          <div></div>
-        )}
+
         <div className="buttons d-flex justify-content-center">
           <button className="save-button" onClick={saveProfile}>
             Save

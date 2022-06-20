@@ -8,7 +8,7 @@ import React, {
   useLayoutEffect,
 } from "react";
 import RoomAuction from "../RoomAuction";
-import { getRooms } from "../../services/room.service";
+import RoomService from "../../services/room.service";
 import useWindowDimensions from "../../hooks/useWindowDimensions";
 import "./room_auctions.css";
 
@@ -21,7 +21,7 @@ function RoomAuctions() {
     timer.current = setInterval(displayData, 1000);
   };
   const getData = () => {
-    getRooms()
+    RoomService.getRooms()
       .then(
         (response) => {
           let d = [];

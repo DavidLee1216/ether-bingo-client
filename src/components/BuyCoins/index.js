@@ -14,7 +14,7 @@ dotenv.config();
 
 function BuyCoins({ hidden, closeClicked }) {
   const [loading, setLoading] = useState(false);
-  const [amountToBuy, setAmountToBuy] = useState(10);
+  const [amountToBuy, setAmountToBuy] = useState(50);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
   const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;

@@ -15,17 +15,13 @@ import { PropTypes } from "prop-types";
 import "./room_auction_page.css";
 import crown from "../../assets/img/crown.png";
 import { AUTH_LOGIN } from "../../store/actions/authActions/types";
-import {
-  getRooms,
-  getOneRoomAuction,
-  getRoomSetting,
-  bidRoom,
-} from "../../services/room.service";
+import RoomService from "../../services/room.service";
 import {
   getCoins,
   CheckCoins,
   getCredits,
 } from "../../store/actions/userActions";
+import { getWonRoomAuction, getOwnRoom } from "../../store/actions/roomActions";
 import { padLeft } from "../../utils/common";
 import LoadingIndicator from "../../utils/loading";
 import "./room_auction_page.css";
@@ -84,7 +80,7 @@ function RoomAuctionPage() {
   };
   const getData = () => {
     let data = { room_id: room_id, last_id: last_id };
-    getOneRoomAuction(data).then(
+    RoomService.getOneRoomAuction(data).then(
       (response) => {
         if (response.data.data.length > 0) {
           last_id =
@@ -96,6 +92,9 @@ function RoomAuctionPage() {
           winner: response.data.winner,
           elapsedTime: response.data.elapsed_time,
         }));
+        if (response.data.winner !== null) {
+          dispatch(getWonRoomAuction());
+        }
       },
       (error) => {
         if (error.response.status === 404) navigate("/");
@@ -109,7 +108,7 @@ function RoomAuctionPage() {
     let room = {
       room_id: room_id,
     };
-    getRoomSetting(room)
+    RoomService.getRoomSetting(room)
       .then((response) => {
         setRoomSetting(response.data);
       })
@@ -135,7 +134,7 @@ function RoomAuctionPage() {
       room_id: room_id,
       username: authUserState.user.username,
     };
-    bidRoom(request)
+    RoomService.bidRoom(request)
       .then((response) => {
         dispatch(getCredits());
       })
@@ -224,7 +223,7 @@ function RoomAuctionPage() {
                 </span>
               </div>
               <div>
-                Ownership expire time of current owner:{" "}
+                Ownership expire time of the current owner:{" "}
                 <span className="about-the-room-content-value">
                   {roomSetting.ownership_deadtime !== null
                     ? roomSetting.ownership_deadtime

@@ -18,4 +18,25 @@ const getRoomSetting = (room) => {
 const bidRoom = (data) => {
   return axios.post("/api/game/bingo/bingo_room_bid/", data);
 };
-export { getRooms, getOneRoomAuction, getRoomSetting, bidRoom };
+
+const getWonRoomAuction = (data) => {
+  return axios.post("/api/game/bingo/get_won_room_auction/", data);
+};
+
+const getOwnRoom = (data) => {
+  return axios.post("/api/game/bingo/get_own_room/", data);
+};
+
+const payForOwnership = (data) => {
+  return axios.post("/api/game/bingo/pay_for_winner/", data);
+};
+
+export default {
+  getRooms,
+  getOneRoomAuction,
+  getRoomSetting,
+  bidRoom,
+  getWonRoomAuction,
+  getOwnRoom,
+  payForOwnership,
+};

@@ -1,0 +1,132 @@
+.pay_for_ownership_wrapper {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  transition: 0.25s ease-in-out;
+  z-index: 100;
+}
+.pay_for_ownership_wrapper.hidden {
+  transform: translate(0, -100%);
+  top: -500px;
+}
+
+.pay_for_ownership_box_container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgb(37, 112, 224);
+  border-radius: 10px;
+  border-color: rgb(39, 4, 136);
+  box-shadow: 2px 2px 3px 1px rgba(222, 222, 228, 0.2),
+    -2px -2px 3px 1px rgba(222, 222, 228, 0.2);
+  padding: 30px 0;
+}
+
+.wrapper_relative_box {
+  position: relative;
+}
+
+.box_title {
+  font-size: 2em;
+  color: black;
+  font-weight: 700;
+  text-align: center;
+}
+
+.expire_date_warning {
+  color: yellow;
+  padding: 10px 30px;
+  font-weight: 600;
+}
+
+.warning_icon {
+  /* color: red; */
+  margin-right: 10px;
+}
+
+.pay_for_ownership_box {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.won_room_box {
+  background-color: black;
+  width: 200px;
+  height: 300px;
+  margin: 0 20px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2),
+    -2px -2px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.won_room_id {
+  color: gold;
+  font-size: 1.2em;
+  text-align: center;
+  line-height: 40px;
+  margin: 20px 0;
+}
+
+.won_price {
+  color: gold;
+  font-size: 1.2em;
+  text-align: center;
+  line-height: 40px;
+  margin: 20px 0;
+}
+
+.title {
+  color: white;
+}
+
+.eth {
+  color: cyan;
+  font-size: 0.8em;
+}
+
+.expire_date {
+  margin-top: 20px;
+  color: red;
+  padding: 5px;
+  font-weight: 600;
+}
+
+.expire_date_time {
+  text-align: center;
+}
+
+.pay_for_ownership_button {
+  /* position: relative; */
+  width: 120px;
+  min-height: 40px;
+  line-height: 40px;
+  font-size: 1.6em;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 5px;
+  border-color: rgb(30, 30, 161);
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  background-image: linear-gradient(rgb(2, 2, 161), rgb(53, 53, 252));
+  color: white;
+  text-align: center;
+  cursor: pointer;
+}
+
+.close_button {
+  top: 0;
+  right: -40px;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  background-color: rgb(37, 112, 224);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}

@@ -7,7 +7,7 @@ import { PropTypes } from "prop-types";
 import "./room_auction.css";
 import crown from "../../assets/img/crown.png";
 import { AUTH_LOGIN } from "../../store/actions/authActions/types";
-import { getRooms, bidRoom } from "../../services/room.service";
+import RoomService from "../../services/room.service";
 import {
   getCoins,
   CheckCoins,
@@ -24,11 +24,14 @@ function RoomAuction({ data }) {
   const navigate = useNavigate();
   const remain_sec = data.time_limit - data.elapsed_time;
   const remain_time =
-    Number.padLeft(Math.floor(remain_sec / 3600)) +
-    ":" +
-    Number.padLeft(Math.floor((remain_sec % 3600) / 60)) +
-    ":" +
-    Number.padLeft((remain_sec % 3600) % 60);
+    remain_sec < 0 || data.winner !== null
+      ? "00:00:00"
+      : Number.padLeft(Math.floor(remain_sec / 3600)) +
+        ":" +
+        Number.padLeft(Math.floor((remain_sec % 3600) / 60)) +
+        ":" +
+        Number.padLeft((remain_sec % 3600) % 60);
+
   const handleBidClick = () => {
     if (authUserState.authState !== AUTH_LOGIN) {
       toast.error("Please log in and charge coins to bid");
@@ -42,7 +45,7 @@ function RoomAuction({ data }) {
       room_id: data.room_id,
       username: authUserState.user.username,
     };
-    bidRoom(request)
+    RoomService.bidRoom(request)
       .then((response) => {
         dispatch(getCredits());
       })
@@ -60,6 +63,7 @@ function RoomAuction({ data }) {
     }
     navigate(`/room_auction/${room_id}`);
   };
+
   return (
     <div
       className="room-auction"
@@ -76,15 +80,21 @@ function RoomAuction({ data }) {
         {data.last_bid_id !== 0 ? data.username : "No bidder yet"}
       </div>
       <div className="d-flex align-items-center flex-column">
-        <button className="room-bid-button" onClick={handleBidClick}>
-          Bid
-        </button>
-        <div className="room-price-per-bid mt-1">
-          price per bid: {data.price_per_bid}
-        </div>
-        <div className="room-coins-per-bid">
-          coins per bid: {data.coin_per_bid}
-        </div>{" "}
+        {data.winner === null ? (
+          <div>
+            <button className="room-bid-button" onClick={handleBidClick}>
+              Bid
+            </button>
+            <div className="room-price-per-bid mt-1">
+              price per bid: {data.price_per_bid}
+            </div>
+            <div className="room-coins-per-bid">
+              coins per bid: {data.coin_per_bid}
+            </div>
+          </div>
+        ) : (
+          <div className="room-auction-ended">The auction ended</div>
+        )}
       </div>
     </div>
   );

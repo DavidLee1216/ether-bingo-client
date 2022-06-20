@@ -83,3 +83,10 @@
 .room-coins-per-bid {
   color: white;
 }
+
+.room-auction-ended {
+  margin-top: 70px;
+  color: white;
+  text-align: center;
+  font-size: 1.8rem;
+}

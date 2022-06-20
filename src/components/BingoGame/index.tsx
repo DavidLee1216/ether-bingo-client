@@ -7,6 +7,7 @@ import styles from "./bingogame.module.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
 import { AUTH_LOGIN } from "../../store/actions/authActions/types";
+import background from "../../assets/img/crown_ticket_noletter.png";
 
 type Props = {
   id: number;
@@ -44,6 +45,9 @@ function BingoItem({ data }: DataType) {
   return (
     <div className={styles.bingo_game} onClick={getIntoOneGame}>
       <Toaster position="top-center" reverseOrder={false} />
+      <div className={styles.game_background}>
+        <img src={background} width="200" height="250"></img>
+      </div>
       <div className={styles.bingo_item}>room id #{data.id}</div>
       <div className={styles.room_owner}>owner: {data.owner}</div>
       <div className={styles.price}>

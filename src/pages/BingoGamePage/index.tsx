@@ -435,7 +435,7 @@ function BingoGamePage() {
     let data = { room_id: room_id };
     getBingoRoomOwnerEarning(data)
       .then((response) => {
-        if (response.data.status == 200) setOwnerEarning(response.data.data);
+        if (response.status == 200) setOwnerEarning(response.data);
         else setOwnerEarning({ earning: "0", period: "" });
       })
       .catch((error) => {

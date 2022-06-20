@@ -212,6 +212,15 @@
   border-color: rgb(46, 45, 45);
   color: white;
 }
+.pay-for-room-button {
+  /* width: 100px; */
+  height: 40px;
+  background-image: linear-gradient(rgb(2, 2, 161), rgb(53, 53, 252));
+  border-radius: 5px;
+  border-color: red;
+  color: white;
+  margin-left: 10px;
+}
 .account-div {
   font-weight: 700;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;

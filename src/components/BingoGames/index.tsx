@@ -12,6 +12,8 @@ import { padLeft } from "../../utils/common";
 import { getBingoGamesInfo } from "../../services/bingo.service";
 import styles from "./bingogames.module.css";
 
+const controller = new AbortController();
+
 type Props = {
   id: number;
   owner: string;
@@ -72,6 +74,7 @@ function BingoGames() {
     setTimerInterval();
     return () => {
       clearInterval(timer.current);
+      controller.abort();
     };
   }, []);
 

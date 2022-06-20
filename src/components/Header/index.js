@@ -32,6 +32,7 @@ import {
   CheckCoins,
   getCredits,
 } from "../../store/actions/userActions";
+import { getWonRoomAuction, getOwnRoom } from "../../store/actions/roomActions";
 
 function Header() {
   const [sideBarOpen, setSideBarOpen] = useState(false);
@@ -39,6 +40,7 @@ function Header() {
   const [loginHidden, setLoginHidden] = useState(true);
   const authUserState = useSelector((state) => state.AuthReducer.authUser);
   const userCoinState = useSelector((state) => state.UserInfoReducer.userCoin);
+  const roomOwnerState = useSelector((state) => state.WonReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -107,6 +109,8 @@ function Header() {
   useLayoutEffect(() => {
     onSilentRefresh();
     dispatch(getCredits());
+    dispatch(getWonRoomAuction());
+    dispatch(getOwnRoom());
   }, []);
 
   return (
@@ -137,6 +141,7 @@ function Header() {
           <UserInfoNav
             authUserState={authUserState}
             userCoinState={userCoinState}
+            roomOwnerState={roomOwnerState}
             logOut={logOut}
           ></UserInfoNav>
         )}

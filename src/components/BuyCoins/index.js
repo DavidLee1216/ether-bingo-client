@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import LoadingIndicator from "../../utils/loading";
 import { ethers, utils } from "ethers";
@@ -17,6 +18,7 @@ function BuyCoins({ hidden, closeClicked }) {
   const [amountToBuy, setAmountToBuy] = useState(50);
   const [error, setError] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
   const contractABI = abi.abi;
   const coinPrice = 0.001;
@@ -31,6 +33,12 @@ function BuyCoins({ hidden, closeClicked }) {
     event.preventDefault();
     try {
       if (window.ethereum) {
+        if (authUserState.user.wallet_address == "") {
+          toast.error("Please set your main wallet address in profile setting");
+          closeClicked();
+          navigate("/profile");
+          return;
+        }
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
         const tokenContract = new ethers.Contract(
@@ -52,7 +60,6 @@ function BuyCoins({ hidden, closeClicked }) {
           }
         );
         setLoading(true);
-        console.log("Buying coins...");
         await txn.wait();
         let data = {
           username: user.username,

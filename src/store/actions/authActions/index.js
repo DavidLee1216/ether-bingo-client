@@ -10,6 +10,11 @@ export const setAuthState = (user, authState) => ({
   authState: authState,
 });
 
+export const setMainWallet = (wallet_address) => ({
+  type: authTypes.SET_WALLET,
+  wallet_address: wallet_address,
+});
+
 export const logOut = () => ({
   type: authTypes.LOGOUT,
 });
@@ -65,7 +70,7 @@ export const recordLoginInfo = (response, dispatch) => {
     id: user.id,
     email: user.email,
     username: user.username,
-    wallet_adress: user.wallet_adress,
+    wallet_address: user.wallet_address,
     first_name: user.first_name,
     last_name: user.last_name,
   };

@@ -110,13 +110,13 @@
   margin-top: 20px;
 }
 .room-auction-page-winner-box {
-  background-image: radial-gradient(
+  /* background-image: radial-gradient(
     circle,
     rgba(2, 0, 36, 1) 0%,
     rgba(15, 18, 89, 1) 75%,
     rgba(70, 84, 143, 1) 100%
-  );
-  border-radius: 20px;
+  ); 
+  border-radius: 20px;*/
   min-height: 150px;
   /* box-shadow: 2px 2px 3px 1px rgba(233, 236, 18, 0.836),
     -2px -2px 3px 1px rgba(233, 236, 18, 0.836); */

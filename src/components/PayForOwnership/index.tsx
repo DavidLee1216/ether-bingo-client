@@ -11,6 +11,7 @@ import RoomService from "../../services/room.service";
 import { getWonRoomAuction } from "../../store/actions/roomActions";
 import styles from "./pay_for_ownership.module.css";
 import LoadingIndicator from "../../utils/loading";
+import { sleep } from "../../utils/common";
 
 type WonRoomType = {
   room_id: number;
@@ -45,24 +46,74 @@ function PayForOwnership({ closeClicked }: { closeClicked: Function }) {
           method: "eth_requestAccounts",
         });
         let userId = user.id;
-        const txn = await tokenContract.payForOwnership(
-          userId.toString(),
-          room_id.toString(),
-          ethers.utils.parseEther(won_price.toString()),
-          {
-            value: ethers.utils.parseEther(won_price.toString()),
-          }
-        );
-        setLoading(true);
-        await txn.wait();
         let data = {
           username: user.username,
           room_id: room_id,
           amount: won_price,
         };
-        RoomService.payForOwnership(data)
-          .then((response) => {
+        setLoading(true);
+        console.log("clicked");
+        // await sleep(2000000);
+        await RoomService.assignOwnership(data)
+          .then(async (response) => {
+            let from_time = response.data.from;
+            let to_time = response.data.to;
+            let from_datetime = Math.round(
+              new Date(from_time).getTime() / 1000
+            );
+            let to_datetime = Math.round(new Date(to_time).getTime() / 1000);
+            try {
+              const txn = await tokenContract.payForOwnership(
+                userId.toString(),
+                room_id.toString(),
+                ethers.utils.parseEther(won_price.toString()),
+                from_datetime,
+                to_datetime,
+                {
+                  value: ethers.utils.parseEther(won_price.toString()),
+                }
+              );
+              await txn.wait();
+              RoomService.payForOwnership(data)
+                .then((response1) => {
+                  console.log("success");
+                })
+                .catch((error) => {
+                  let data = {
+                    username: user.username,
+                    room_id: room_id,
+                    from_time: response.data.from,
+                    to_time: response.data.to,
+                  };
+                  RoomService.removeOwnership(data)
+                    .then((response) => {
+                      console.log("successfully deleted");
+                    })
+                    .catch((err) => {
+                      console.log("Failed to delete");
+                    });
+                  setLoading(false);
+                  return;
+                });
+            } catch (err) {
+              let data = {
+                username: user.username,
+                room_id: room_id,
+                from_time: response.data.from,
+                to_time: response.data.to,
+              };
+              RoomService.removeOwnership(data)
+                .then((response) => {
+                  console.log("successfully deleted");
+                })
+                .catch((err) => {
+                  console.log("Failed to delete");
+                });
+              setLoading(false);
+              return;
+            }
             dispatch(getWonRoomAuction());
+
             toast.success(`You owned ${room_id} bingo room`);
           })
           .catch((error) => {
@@ -74,6 +125,7 @@ function PayForOwnership({ closeClicked }: { closeClicked: Function }) {
         setError("Install a MetaMask wallet to get our token.");
       }
     } catch (error) {
+      toast.error("Can't complete the transaction");
       console.log(error);
     }
   };
@@ -95,6 +147,7 @@ function PayForOwnership({ closeClicked }: { closeClicked: Function }) {
             Please pay before expiry date. Or you will lose the chance to own
             the room
           </div>
+          {roomState.won_rooms.length === 0 && closeClicked()}
           <div className={styles.pay_for_ownership_box}>
             {roomState.won_rooms.map((won_room: WonRoomType, idx: number) => (
               <div className={styles.won_room_box} key={idx}>

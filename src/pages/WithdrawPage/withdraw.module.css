@@ -1,0 +1,127 @@
+.withdraw_page_wrapper {
+  background-color: rgb(12, 34, 56);
+  width: 100%;
+  height: 100vh;
+  color: white;
+}
+
+@media screen and (min-width: 1000px) {
+  .container {
+    width: 1000px;
+    margin: 0 auto;
+    padding: 80px 0;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .container {
+    padding: 5rem 1em;
+  }
+}
+
+@media screen and (min-width: 760px) {
+  .container {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .container {
+    font-size: 0.8rem;
+  }
+}
+
+.total_earning,
+.withdrawable_earning {
+  display: flex;
+  color: white;
+  line-height: 40px;
+  align-items: center;
+}
+
+.total_earning_title,
+.withdrawable_earning_title {
+  font-size: 1.2em;
+  font-weight: normal;
+}
+
+.total_earning_amount,
+.withdrawable_earning_amount {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-left: 30px;
+}
+
+.check_icon {
+  font-size: 2em;
+  color: greenyellow;
+  margin-left: 30px;
+}
+
+.times_icon {
+  font-size: 2em;
+  color: rgba(255, 0, 0, 0.7);
+  margin-left: 30px;
+}
+
+.verify_button {
+  width: 120px;
+  height: 40px;
+  border-radius: 10px;
+  background-image: linear-gradient(rgb(187, 220, 241), rgb(123, 155, 241));
+  font-weight: bold;
+  margin-left: 30px;
+}
+
+.verify_button:hover {
+  border: 2px solid blue;
+}
+
+.withdraw_button {
+  width: 120px;
+  height: 40px;
+  border-radius: 10px;
+  background-image: linear-gradient(rgb(245, 235, 218), rgb(248, 203, 118));
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.withdraw_button:hover {
+  border: 1px solid orange;
+}
+
+.earning_history {
+  color: white;
+  display: table;
+  margin-top: 30px;
+  width: 100%;
+}
+
+.row {
+  display: table-row;
+  height: 40px;
+}
+
+.history_time,
+.history_kind,
+.history_type,
+.history_amount,
+.history_verified,
+.history_withdrawn {
+  display: table-cell;
+}
+
+.history_check_icon {
+  font-size: 1em;
+  color: green;
+}
+
+.history_times_icon {
+  font-size: 1em;
+  color: rgba(255, 0, 0, 0.7);
+}
+
+.history_verified,
+.history_withdrawn {
+  text-align: center;
+}

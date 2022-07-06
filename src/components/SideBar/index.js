@@ -5,15 +5,20 @@ import HelpIcon from "@mui/icons-material/Help";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import "./sidebar.css";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 function SideBar({ hidden }) {
   const [helpArrowUp, setHelpArrowUp] = useState(false);
+  const navigate = useNavigate();
   const handleHelpArrow = (e) => {
     setHelpArrowUp((prev) => !prev);
   };
+  const gotoHome = () => {
+    navigate("/");
+  };
   return (
     <div className={`sidebar ${hidden ? "hidden" : ""}`}>
-      <IconWrapper className="home">
+      <IconWrapper onClick={gotoHome}>
         <ItemWrapper>
           <HomeIcon></HomeIcon>
           <span className="text">Home</span>

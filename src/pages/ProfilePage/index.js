@@ -1,10 +1,12 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import countryList from "react-select-country-list";
 // import CountryDropdown from "country-dropdown-with-flags-for-react";
 import Select from "react-select";
 import { ethers, utils } from "ethers";
 import toast, { Toaster } from "react-hot-toast";
 import UserService from "../../services/user.service";
+import { setMainWallet } from "../../store/actions/authActions";
 import "./profile.css";
 import LoadingIndicator from "../../utils/loading";
 import abi from "../../contracts/EtherBingo.json";
@@ -18,6 +20,7 @@ function ProfilePage() {
   const [profileExist, setProfileExist] = useState(false);
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [error, setError] = useState(null);
+  const dispatch = useDispatch();
   const user = JSON.parse(localStorage.user);
   const contractAddress = process.env.REACT_APP_CONTRACT_ADDRESS;
   const contractABI = abi.abi;
@@ -94,25 +97,26 @@ function ProfilePage() {
       method: "eth_requestAccounts",
     });
     const account = accounts[0];
-    if (account !== wallet) {
+    if (profileExist == false && account !== wallet) {
       toast.error(
-        "Connected address is different from wallet address. Click connect button and try again."
+        "Connected address is different from wallet address. Check your wallet and reconnect to it."
       );
       return;
     }
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const tokenContract = new ethers.Contract(
-      contractAddress,
-      contractABI,
-      signer
-    );
+    const tokenContract = null;
+    if (!profileExist)
+      tokenContract = new ethers.Contract(contractAddress, contractABI, signer);
     setLoading(true);
     // await sleep(1000);
     UserService.setProfile(profile).then(
       async (response) => {
         try {
-          const txn = await tokenContract.setMainWallet(user.id);
+          if (profileExist == false) {
+            await tokenContract.setMainWallet(user.id);
+            dispatch(setMainWallet(wallet));
+          }
           setProfileExist(true);
           toast.success("Profile saved successfully.");
         } catch (error) {

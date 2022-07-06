@@ -12,6 +12,7 @@ import AuthenticationPage from "./pages/AuthenticationPage";
 import BuyCoinPage from "./pages/BuyCoinPage";
 import RoomAuctionPage from "./pages/RoomAuctionPage";
 import BingoGamePage from "./pages/BingoGamePage";
+import WithdrawPage from "./pages/WithdrawPage";
 
 const store = Store();
 
@@ -25,6 +26,7 @@ function App() {
           <Route path="/deposit" element={<DepositPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/buycoin" element={<BuyCoinPage />} />
+          <Route path="/withdraw" element={<WithdrawPage />} />
           <Route path="/auth" element={<AuthenticationPage />} />
           <Route path="/auth/:id/:key" element={<AuthenticationPage />} />
           <Route path="/room_auction/:room_id" element={<RoomAuctionPage />} />

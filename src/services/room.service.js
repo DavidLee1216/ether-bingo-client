@@ -31,6 +31,14 @@ const payForOwnership = (data) => {
   return axios.post("/api/game/bingo/pay_for_winner/", data);
 };
 
+const assignOwnership = (data) => {
+  return axios.post("/api/game/bingo/assign_ownership/", data);
+};
+
+const removeOwnership = (data) => {
+  return axios.post("/api/game/bingo/remove_ownership/", data);
+};
+
 export default {
   getRooms,
   getOneRoomAuction,
@@ -39,4 +47,6 @@ export default {
   getWonRoomAuction,
   getOwnRoom,
   payForOwnership,
+  assignOwnership,
+  removeOwnership,
 };

@@ -68,6 +68,7 @@ function RoomAuctionPage() {
     auction_win_time_limit: 3600,
   });
   const [lastBidderChanged, setLastBidderChanged] = useState(false);
+  let isWinner = false;
   const [loading, setLoading] = useState(false);
   const timer = useRef();
   const aboutRef = useRef();
@@ -87,13 +88,21 @@ function RoomAuctionPage() {
             response.data.data[response.data.data.length - 1].bid_id_of_auction;
           setLastBidderChanged(true);
         } else setLastBidderChanged(false);
+        let new_user_data = response.data.data;
+        for (let i = 0; i < new_user_data.length; i++) {
+          let date = new Date(new_user_data[i].bid_time);
+          new_user_data[i].bid_time = date.toLocaleString();
+        }
         setAuctionInfo((prevAuctionInfo) => ({
-          arr: [...prevAuctionInfo.arr, ...response.data.data],
+          arr: [...prevAuctionInfo.arr, ...new_user_data],
           winner: response.data.winner,
           elapsedTime: response.data.elapsed_time,
         }));
         if (response.data.winner !== null) {
-          dispatch(getWonRoomAuction());
+          if (isWinner === false) {
+            dispatch(getWonRoomAuction());
+            isWinner = true;
+          }
         }
       },
       (error) => {
@@ -276,7 +285,9 @@ function RoomAuctionPage() {
                 width="80"
                 height="80"
               />
-              Congratulations!{" "}
+              {authUserState.user.username === auctionInfo.winner.username
+                ? "Congratulations! "
+                : "The winner is "}
               <span className="winner-username">
                 {auctionInfo.winner.username}
               </span>

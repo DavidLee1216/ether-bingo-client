@@ -34,6 +34,11 @@ function BingoItem({ data }: DataType) {
       toast.error("Please log in and charge coins to bid");
       return;
     }
+    if (authUserState.user.wallet_address == "") {
+      toast.error("Please set your main wallet address in profile setting");
+      navigate("/profile");
+      return;
+    }
     navigate(`/bingo/${data.id}`);
   };
 

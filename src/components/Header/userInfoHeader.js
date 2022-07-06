@@ -84,8 +84,8 @@ export default function UserInfoNav({
               <NavLink className="navlink" to="/profile">
                 Profile
               </NavLink>
-              <NavLink className="navlink" to="/transaction">
-                Transactions
+              <NavLink className="navlink" to="/withdraw">
+                Withdraw
               </NavLink>
               <NavLink className="navlink" to="/buycoin">
                 Buy Coin

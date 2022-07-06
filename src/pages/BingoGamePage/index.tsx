@@ -247,7 +247,7 @@ function BingoOwnerEarning({
   period: string;
 }) {
   return (
-    <div className={`${styles.owner_earning} mx-2`} style={{ color: "white" }}>
+    <div className={`${styles.owner_earning} ms-2`} style={{ color: "white" }}>
       <span>Owner's earning:</span>
       <span style={{ color: "gold", marginLeft: "10px" }}>{earning}</span>
       <span style={{ color: "cyan", fontSize: "0.6em" }}>ETH</span>

@@ -23,9 +23,7 @@ export default function UserInfoNav({
   const handleOverUserArrow = (e) => {
     setuserArrowUp((prev) => !prev);
   };
-  const handleLeaveUserArrow = (e) => {
-    setuserArrowUp(false);
-  };
+
   const handleModalShow = () => {
     if (location.pathname === "/buycoin") {
       return;

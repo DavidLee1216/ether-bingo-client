@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import LoadingIndicator from "../../utils/loading";
-import { ethers, utils } from "ethers";
+import { ethers } from "ethers";
 import toast, { Toaster } from "react-hot-toast";
-import UserService from "../../services/user.service";
 import { buyCoins, AddCoins } from "../../store/actions/userActions";
 import "./buycoins_page.css";
 import abi from "../../contracts/EtherBingo.json";
@@ -90,22 +89,22 @@ function BuyCoinPage() {
           });
         setLoading(false);
       } else {
-        console.log("Ethereum object not found, install Metamask.");
-        setError("Install a MetaMask wallet to get our token.");
+        setError("Install a MetaMask");
       }
     } catch (error) {
       console.log(error);
     }
   });
 
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     setAmountToBuy(e.target.value);
-  };
+  });
   return (
     <div className="buycoin">
       <Toaster position="top-center" reverseOrder={false} />
       {loading && <LoadingIndicator />}
       <div className="buycoin-box col-10 col-md-5 pt-5 mx-auto">
+        <div className="text-center text-white">{error}</div>
         <div className="buycoin-title text-center">BUY GAME COINS</div>
         <div className="coin-price-wrapper d-flex justify-content-between">
           <div className="coin-price-caption col-4">Coin Price:</div>

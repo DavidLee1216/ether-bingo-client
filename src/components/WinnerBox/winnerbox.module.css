@@ -1,0 +1,26 @@
+.winner_box {
+  height: 300px;
+  background-color: rgba(12, 34, 56, 0.5);
+  display: flex;
+  padding: 20px 20px;
+  overflow: auto;
+}
+
+/* .winner_box_title{
+  font-size: 1.2rem;
+} */
+
+.winner_list {
+  color: white;
+}
+
+.username {
+  margin-right: 1rem;
+  color: gold;
+}
+
+@media screen and (min-width: 768px) {
+  .winner_list {
+    margin: 0 auto;
+  }
+}

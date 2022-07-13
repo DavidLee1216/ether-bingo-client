@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import LoadingIndicator from "../../utils/loading";
-import { ethers, utils } from "ethers";
+import { ethers } from "ethers";
 import toast, { Toaster } from "react-hot-toast";
 import { buyCoins, AddCoins } from "../../store/actions/userActions";
 import "./buycoins_box.css";
@@ -33,7 +33,7 @@ function BuyCoins({ hidden, closeClicked }) {
     event.preventDefault();
     try {
       if (window.ethereum) {
-        if (authUserState.user.wallet_address == "") {
+        if (authUserState.user.wallet_address === "") {
           toast.error("Please set your main wallet address in profile setting");
           closeClicked();
           navigate("/profile");
@@ -93,6 +93,7 @@ function BuyCoins({ hidden, closeClicked }) {
       {loading && <LoadingIndicator />}
       <div className="wrapper-relative-box mx-auto">
         <div className="buycoin-box-box">
+          <div className="text-center text-white">{error}</div>
           <div className="buycoin-title-box text-center">BUY GAME COINS</div>
           <div className="coin-price-wrapper d-flex px-5 justify-content-between">
             <div className="coin-price-caption col-4">Coin Price:</div>

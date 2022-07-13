@@ -1,9 +1,10 @@
 import React, { useState, useCallback, useMemo, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import countryList from "react-select-country-list";
 // import CountryDropdown from "country-dropdown-with-flags-for-react";
 import Select from "react-select";
-import { ethers, utils } from "ethers";
+import { ReactComponent as MetaMaskIcon } from "../../assets/img/metamask.svg";
+import { ethers } from "ethers";
 import toast, { Toaster } from "react-hot-toast";
 import UserService from "../../services/user.service";
 import { setMainWallet } from "../../store/actions/authActions";
@@ -61,10 +62,6 @@ function ProfilePage() {
     }
   }, []);
 
-  function sleep(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   const saveProfile = async (e) => {
     if (country === "") {
       toast.error("Please select coutry");
@@ -97,7 +94,7 @@ function ProfilePage() {
       method: "eth_requestAccounts",
     });
     const account = accounts[0];
-    if (profileExist == false && account !== wallet) {
+    if (profileExist === false && account !== wallet) {
       toast.error(
         "Connected address is different from wallet address. Check your wallet and reconnect to it."
       );
@@ -105,15 +102,17 @@ function ProfilePage() {
     }
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
-    const tokenContract = null;
-    if (!profileExist)
-      tokenContract = new ethers.Contract(contractAddress, contractABI, signer);
+    const tokenContract = new ethers.Contract(
+      contractAddress,
+      contractABI,
+      signer
+    );
     setLoading(true);
     // await sleep(1000);
     UserService.setProfile(profile).then(
       async (response) => {
         try {
-          if (profileExist == false) {
+          if (profileExist === false) {
             await tokenContract.setMainWallet(user.id);
             dispatch(setMainWallet(wallet));
           }
@@ -140,7 +139,6 @@ function ProfilePage() {
     };
     UserService.getProfile(data).then(
       (response) => {
-        let username = response.data.username;
         let cc = countryOptions.find(
           (elem) => elem.label === response.data.country
         );
@@ -211,15 +209,19 @@ function ProfilePage() {
         </div>
         <div className="main-wallet-wrapper d-flex">
           <div className="text-white col-4">Main Wallet:</div>
-          {isWalletConnected && <div className="text-white pe-3">{wallet}</div>}
-          {profileExist === false && (
-            <button
-              className="wallet-button"
-              onClick={checkIfWalletIsConnected}
-            >
-              {isWalletConnected ? "Reconnect Wallet" : "Connect Wallet"}
-            </button>
-          )}
+          <div className="wallet">
+            {isWalletConnected && (
+              <div className="text-white pe-3">{wallet}</div>
+            )}
+            {profileExist === false && (
+              <div className="wallet-button" onClick={checkIfWalletIsConnected}>
+                <MetaMaskIcon width={25} height={25}></MetaMaskIcon>
+                <span style={{ fontWeight: "bold", marginLeft: "2rem" }}>
+                  {isWalletConnected ? "Reconnect" : "MetaMask"}
+                </span>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="buttons d-flex justify-content-center">

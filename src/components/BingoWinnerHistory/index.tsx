@@ -37,15 +37,13 @@ function BingoWinnerHistory({ winners }: { winners: WinnerDataType[] }) {
           {winners.length > 0 && (
             <div className={styles.last_winner}>
               <span className={styles.last_winner_name}>
-                {winners[winners.length - 1].username}
+                {winners[0].username}
               </span>
               <span className={styles.last_winner_earning}>
-                {winners[winners.length - 1].earning}
+                {winners[0].earning}
               </span>
               <span className={styles.last_eth}>ETH</span>
-              <span className={styles.last_winner_time}>
-                {winners[winners.length - 1].time}
-              </span>
+              <span className={styles.last_winner_time}>{winners[0].time}</span>
             </div>
           )}
           <div className={styles.history_hide_icon} onClick={hideWinnerHistory}>

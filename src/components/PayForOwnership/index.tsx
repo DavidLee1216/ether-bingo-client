@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
 import CloseIcon from "@mui/icons-material/Close";
@@ -23,6 +23,7 @@ function PayForOwnership({ closeClicked }: { closeClicked: Function }) {
   const [error, setError] = useState("");
   const contractAddress: string = process.env.REACT_APP_CONTRACT_ADDRESS!;
   const contractABI = abi.abi;
+  const ownershipBoxRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
   const roomState = useSelector((state: RootState) => state.WonReducer);
   const authUserState = useSelector(
@@ -52,7 +53,6 @@ function PayForOwnership({ closeClicked }: { closeClicked: Function }) {
           amount: won_price,
         };
         setLoading(true);
-        console.log("clicked");
         // await sleep(2000000);
         await RoomService.assignOwnership(data)
           .then(async (response) => {
@@ -132,6 +132,17 @@ function PayForOwnership({ closeClicked }: { closeClicked: Function }) {
   const handleClose = () => {
     closeClicked();
   };
+
+  useEffect(() => {
+    if (ownershipBoxRef && ownershipBoxRef.current) {
+      if (window.outerWidth - 100 < roomState.won_rooms.length * 240) {
+        ownershipBoxRef.current.style.justifyContent = "start";
+      } else {
+        ownershipBoxRef.current.style.justifyContent = "space-evenly";
+      }
+    }
+  }, [roomState.won_rooms]);
+
   return (
     <div className={styles.pay_for_ownership_wrapper}>
       <Toaster position="top-center" reverseOrder={false} />
@@ -148,7 +159,7 @@ function PayForOwnership({ closeClicked }: { closeClicked: Function }) {
             the room
           </div>
           {roomState.won_rooms.length === 0 && closeClicked()}
-          <div className={styles.pay_for_ownership_box}>
+          <div className={styles.pay_for_ownership_box} ref={ownershipBoxRef}>
             {roomState.won_rooms.map((won_room: WonRoomType, idx: number) => (
               <div className={styles.won_room_box} key={idx}>
                 <div className={styles.won_room_id}>
@@ -160,13 +171,18 @@ function PayForOwnership({ closeClicked }: { closeClicked: Function }) {
                   {won_room.won_price}
                   <span className={styles.eth}>ETH</span>
                 </div>
-                <div
-                  className={styles.pay_for_ownership_button}
-                  onClick={() =>
-                    handlePayForOwnership(won_room.room_id, won_room.won_price)
-                  }
-                >
-                  Pay
+                <div className={styles.pay_for_ownership_button_wrapper}>
+                  <div
+                    className={styles.pay_for_ownership_button}
+                    onClick={() =>
+                      handlePayForOwnership(
+                        won_room.room_id,
+                        won_room.won_price
+                      )
+                    }
+                  >
+                    Pay
+                  </div>
                 </div>
                 <div className={styles.expire_date}>
                   <div>expiry date:</div>

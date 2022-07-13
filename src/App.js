@@ -7,12 +7,15 @@ import HomePage from "./pages/HomePage";
 import DepositPage from "./pages/DepositPage";
 import ProfilePage from "./pages/ProfilePage";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
 import AuthenticationPage from "./pages/AuthenticationPage";
 import BuyCoinPage from "./pages/BuyCoinPage";
 import RoomAuctionPage from "./pages/RoomAuctionPage";
 import BingoGamePage from "./pages/BingoGamePage";
 import WithdrawPage from "./pages/WithdrawPage";
+import TermsAndService from "./pages/TermsAndService";
+import AboutBingo from "./pages/HelpPage/aboutBingo";
+import AboutAuction from "./pages/HelpPage/aboutAuction";
+import HelpPage from "./pages/HelpPage";
 
 const store = Store();
 
@@ -31,7 +34,12 @@ function App() {
           <Route path="/auth/:id/:key" element={<AuthenticationPage />} />
           <Route path="/room_auction/:room_id" element={<RoomAuctionPage />} />
           <Route path="/bingo/:room_id" element={<BingoGamePage />} />
+          <Route path="/terms" element={<TermsAndService />} />
+          <Route path="/about" element={<HelpPage />} />
+          <Route path="/help/bingo" element={<AboutBingo />} />
+          <Route path="/help/auction" element={<AboutAuction />} />
         </Routes>
+        {/* <Footer /> */}
       </BrowserRouter>
     </Provider>
   );

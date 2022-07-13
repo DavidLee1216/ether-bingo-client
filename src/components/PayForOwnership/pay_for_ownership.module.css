@@ -28,6 +28,7 @@
 
 .wrapper_relative_box {
   position: relative;
+  max-width: calc(100vw - 100px);
 }
 
 .box_title {
@@ -50,7 +51,8 @@
 
 .pay_for_ownership_box {
   display: flex;
-  justify-content: space-evenly;
+  width: 100%;
+  overflow: auto;
 }
 
 .won_room_box {
@@ -97,6 +99,10 @@
 
 .expire_date_time {
   text-align: center;
+}
+
+.pay_for_ownership_button_wrapper {
+  width: 200px;
 }
 
 .pay_for_ownership_button {

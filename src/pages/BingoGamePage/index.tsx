@@ -64,7 +64,8 @@ function BingoUsers({
     .map((x) => x.count)
     .reduce((previousValue, currentValue) => previousValue + currentValue, 0);
   let total_price = total_card_count * price;
-  let winner_eth_income = total_price * 0.85 * 0.001;
+  let winner_eth_income =
+    Math.round(total_price * 0.85 * 0.001 * 100000) / 100000;
 
   return (
     <div className={styles.bingo_users}>
@@ -308,7 +309,7 @@ function BingoWinners({
         let timer = setTimeout(() => {
           if (winnerComponentRef.current) {
             winnerComponentRef.current.style.animationName = "null";
-            winnerComponentRef.current.classList.add(styles.winners_hidden);
+            // winnerComponentRef.current.classList.add(styles.winners_hidden);
           }
           clearTimeout(timer);
         }, 7800);
@@ -356,6 +357,7 @@ function BingoGamePage() {
   const [owner, setOwner] = useState("");
   const [price, setPrice] = useState(0);
   const [status, setStatus] = useState("");
+  const [leftTime, setLeftTime] = useState(0);
   const [users, setUsers] = useState<UserCardCount[]>([]);
   const [numbers, setNumbers] = useState({ lastNumber: 0, calledNumbers: [] });
   const [winners, setWinners] = useState<UserCardType[]>([]);
@@ -451,6 +453,7 @@ function BingoGamePage() {
         setStatus(response.data.status);
         if (response.data.status === "selling") {
           setWinnerHidden(true);
+          setLeftTime(response.data.time_left);
           setUsers(response.data.data);
         } else if (response.data.status === "calling") {
           setNumbers({
@@ -481,7 +484,7 @@ function BingoGamePage() {
   };
 
   const displayData = () => {
-    getData();
+    if (timer.current !== undefined) getData();
   };
 
   const setTimerInterval = () => {
@@ -548,7 +551,9 @@ function BingoGamePage() {
           getWinnersData();
           setWinnerHidden(true);
           getRoomOwnerEarning();
-          getMyData();
+          setMyTickets({ username: authUserState.user.username, cards: [] });
+          setUsers([]);
+          setPrice(0);
           clearTimeout(timer);
         }, 11000);
       }
@@ -608,7 +613,7 @@ function BingoGamePage() {
               status !== "calling" ? styles.no_calling : styles.calling
             } mx-5`}
           >
-            {status}
+            {status !== "transition" ? status : "Wait a second"}
           </div>
           {status === "selling" ? (
             <div
@@ -619,6 +624,9 @@ function BingoGamePage() {
             </div>
           ) : (
             <></>
+          )}
+          {status === "selling" && (
+            <div className={styles.left_time}>{leftTime}s</div>
           )}
         </div>
         {status !== "selling" && (

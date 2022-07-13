@@ -26,7 +26,7 @@ type Props = {
 
 function BingoGames() {
   const [data, setData] = useState<Props[][]>([]);
-  const [width, setWidth] = useState(window.innerWidth);
+  const [width, setWidth] = useState(window.outerWidth);
   let row_count = width < 460 ? 1 : width < 690 ? 2 : width < 930 ? 3 : 4;
   const timer = useRef<ReturnType<typeof setInterval>>();
   const getData = () => {
@@ -45,7 +45,7 @@ function BingoGames() {
       });
   };
   const displayData = () => {
-    getData();
+    if (timer.current !== undefined) getData();
   };
   const setTimerInterval = () => {
     timer.current = setInterval(displayData, 1000);
@@ -61,6 +61,7 @@ function BingoGames() {
         : window.innerWidth < 930
         ? 3
         : 4;
+    displayData();
   };
 
   useLayoutEffect(() => {

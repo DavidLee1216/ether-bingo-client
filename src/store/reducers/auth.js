@@ -1,8 +1,6 @@
 import {
   SET_AUTH_USER,
   AUTH_NO_LOGIN,
-  AUTH_LOGIN,
-  AUTH_LOGIN_NO_EMAIL_CONFIRM,
   LOGOUT,
   SET_WALLET,
 } from "../actions/authActions/types";

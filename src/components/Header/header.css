@@ -1,8 +1,12 @@
-.navbar {
+.navbar1 {
+  display: flex;
+  /* flex-wrap: wrap; */
+  align-items: center;
+  justify-content: space-between;
   height: 60px;
   width: 100%;
   background-color: black;
-  padding: 0 30px 0 30px;
+  padding: 0.5rem 2rem;
 }
 
 .nav-sidebar-btn {

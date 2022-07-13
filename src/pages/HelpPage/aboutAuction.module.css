@@ -1,0 +1,20 @@
+.about_auction_wrapper {
+  background-color: rgb(12, 34, 78);
+  color: white;
+}
+
+.title {
+  font-size: 1.5em;
+  font-weight: 500;
+  height: 70px;
+  line-height: 70px;
+  text-align: center;
+  background-color: rgb(12, 34, 56);
+  color: white;
+}
+
+.content {
+  min-height: 80vh;
+  line-height: 30px;
+  padding: 20px 50px;
+}

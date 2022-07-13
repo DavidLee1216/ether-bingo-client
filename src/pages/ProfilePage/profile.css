@@ -28,7 +28,17 @@
   height: 40px;
 }
 
+.wallet {
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: anywhere;
+}
+
 .wallet-button {
-  width: 150px;
+  /* width: 150px; */
   white-space: nowrap;
+  background-color: white;
+  padding: 20px 40px;
+  border-radius: 10px;
+  cursor: pointer;
 }

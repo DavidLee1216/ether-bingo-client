@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";

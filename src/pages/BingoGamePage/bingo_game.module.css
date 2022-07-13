@@ -3,6 +3,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Titan+One&display=swap");
 
+@media screen and (max-width: 768px) {
+  .bingo_numbers_wrapper .called_numbers {
+    display: none;
+  }
+  .bingo_numbers_wrapper {
+    position: relative;
+  }
+  .bingo_numbers_wrapper .called_count {
+    /* position: absolute; */
+    /* bottom: -20px; */
+    /* left: 50%;
+    transform: translateX(-50%); */
+    margin-top: -20px;
+    z-index: 0;
+  }
+}
+
 /* width */
 .bingo_my_cards::-webkit-scrollbar {
   width: 10px;
@@ -34,16 +51,34 @@
   min-height: 100vh;
 }
 
+@media screen and (max-width: 768px) {
+  .called_numbers {
+    visibility: hidden;
+  }
+  .user_info {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    top: 280px;
+    background-color: rgb(12, 34, 56);
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .called_numbers {
+    visibility: visible;
+  }
+  .user_info {
+    position: absolute;
+    display: inline-block;
+    left: 480px;
+    right: 20px;
+  }
+}
+
 .game_info {
   display: inline-block;
   width: 480px;
-}
-
-.user_info {
-  position: absolute;
-  display: inline-block;
-  left: 480px;
-  right: 20px;
 }
 
 .room_info {
@@ -93,6 +128,7 @@
 
 .game_status_buy {
   display: flex;
+  position: relative;
   min-height: 40px;
   justify-content: space-evenly;
   align-items: center;
@@ -120,6 +156,13 @@
   padding-right: 10px;
   cursor: pointer;
 }
+.left_time {
+  position: absolute;
+  color: white;
+  right: 10px;
+  top: 0px;
+  line-height: 40px;
+}
 
 .bingo_my_cards {
   display: flex;
@@ -131,11 +174,26 @@
 .bingo_users {
   margin-top: 2rem;
 }
+/* .bingo_users::after {
+  height: 300px;
+} */
 
 .winner_income {
   text-align: center;
   color: white;
   font-size: 1.6rem;
+}
+
+@media screen and (min-width: 768px) {
+  .winner_income {
+    font-size: 1.6rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .winner_income {
+    font-size: 1.3rem;
+  }
 }
 
 .winner_income_value {
@@ -245,7 +303,7 @@
   /* animation-name: last_number_animation; */
   animation-duration: 3s;
   animation-iteration-count: 1;
-  animation-timing-function: ease-in-out;
+  animation-timing-function: linear;
 }
 
 @keyframes last_number_animation {
@@ -281,7 +339,7 @@
   left: 0;
   top: 0;
   background-color: rgba(0, 0, 0, 0);
-  z-index: 10;
+  z-index: 1;
 
   /* animation-name: winners_component_animation; */
   animation-duration: 8s;
@@ -295,16 +353,20 @@
 }
 
 .winner_you_won {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
   font-family: "Titan One", cursive;
   font-size: 3rem;
   text-align: center;
   margin: 200px auto;
   color: gold;
   text-shadow: -1px -1px 0 red, 1px -1px 0 red, -1px 1px 0 red, 1px 1px 0 red;
-  z-index: 2;
+  z-index: 3;
 }
 
 .winner_data_wrapper {
+  display: flex;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -312,6 +374,7 @@
   background-color: black;
   padding: 5px;
   border-radius: 5px;
+  z-index: 2;
 }
 
 .winner_data {
@@ -334,8 +397,10 @@
     opacity: 1;
   }
   100% {
-    transform: scale(0) translateY(-100%);
-    opacity: 0;
+    transform: translateY(0);
+    opacity: 1;
+    /* transform: scale(0) translateY(-100%);
+    opacity: 0; */
   }
 }
 

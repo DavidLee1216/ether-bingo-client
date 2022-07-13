@@ -2,10 +2,9 @@ import React, {
   useState,
   useLayoutEffect,
   useEffect,
-  useRef,
   useCallback,
 } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import "styled-components";
 import styled from "styled-components";
 import SideBar from "../SideBar";
@@ -13,25 +12,13 @@ import "./header.css";
 import Register from "../Register";
 import Login from "../Login";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  SET_AUTH_USER,
-  LOGOUT,
-  AUTH_LOGIN,
-  AUTH_LOGIN_NO_EMAIL_CONFIRM,
-  AUTH_NO_LOGIN,
-} from "../../store/actions/authActions/types";
-import { BingoActionTypes } from "../../store/actions/bingoActions";
+import { AUTH_LOGIN } from "../../store/actions/authActions/types";
 import axios from "axios";
-// import axiosInstance from "../../axios";
 import AuthVerify, { parseJwt } from "../../utils/authVerify";
 import { logout, jwtSetUserState } from "../../store/actions/authActions";
 import UserInfoNav from "./userInfoHeader";
 import HeaderLogo from "../HeaderLogo";
-import {
-  getCoins,
-  CheckCoins,
-  getCredits,
-} from "../../store/actions/userActions";
+import { getCredits } from "../../store/actions/userActions";
 import { getWonRoomAuction, getOwnRoom } from "../../store/actions/roomActions";
 
 function Header() {
@@ -42,9 +29,9 @@ function Header() {
   const userCoinState = useSelector((state) => state.UserInfoReducer.userCoin);
   const roomOwnerState = useSelector((state) => state.WonReducer);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleSideBar = (e) => {
+  const handleSideBar = () => {
     setSideBarOpen((prev) => !prev);
   };
   const handleRegister = (e) => {
@@ -74,20 +61,7 @@ function Header() {
     localStorage.removeItem("user");
     localStorage.removeItem("token");
   };
-  // const getCredits = () => {
-  //   if (localStorage.user) {
-  //     const user = JSON.parse(localStorage.user);
-  //     let data = {
-  //       username: user.username,
-  //     };
-  //     getCoins(data)
-  //       .then((response) => {
-  //         const amount = response.data.coin;
-  //         dispatch(CheckCoins(amount));
-  //       })
-  //       .catch((error) => {});
-  //   }
-  // };
+
   const onSilentRefresh = useCallback(() => {
     if (localStorage.token) {
       const decodedJwt = parseJwt(localStorage.token);
@@ -105,6 +79,9 @@ function Header() {
       }
     }
   });
+  const closeSideBar = () => {
+    setSideBarOpen(false);
+  };
 
   useLayoutEffect(() => {
     onSilentRefresh();
@@ -113,19 +90,28 @@ function Header() {
     dispatch(getOwnRoom());
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("click", closeSideBar);
+    return () => {
+      window.removeEventListener("click", closeSideBar);
+    };
+  }, []);
+
   return (
     <header>
-      <nav className="header navbar">
+      <nav className="header navbar1">
         <div className="d-flex align-items-center">
-          <button
-            className={`nav-sidebar-btn ${sideBarOpen ? "is-opened" : ""}`}
-            onClick={handleSideBar}
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
+          <div onClick={(e) => e.stopPropagation()}>
+            <button
+              className={`nav-sidebar-btn ${sideBarOpen ? "is-opened" : ""}`}
+              onClick={handleSideBar}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
           <HeaderLogo></HeaderLogo>
         </div>
         {authUserState.authState !== AUTH_LOGIN ? (
@@ -146,6 +132,7 @@ function Header() {
           ></UserInfoNav>
         )}
       </nav>
+      <div style={{ height: "60px" }}></div>
       <SideBar hidden={!sideBarOpen}></SideBar>
       <Register
         hidden={registerHidden}

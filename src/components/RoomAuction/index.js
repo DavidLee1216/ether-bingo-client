@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
@@ -8,11 +8,7 @@ import "./room_auction.css";
 import crown from "../../assets/img/crown.png";
 import { AUTH_LOGIN } from "../../store/actions/authActions/types";
 import RoomService from "../../services/room.service";
-import {
-  getCoins,
-  CheckCoins,
-  getCredits,
-} from "../../store/actions/userActions";
+import { getCredits } from "../../store/actions/userActions";
 
 Number.padLeft = (nr, len = 2, padChr = `0`) =>
   `${nr < 0 ? `-` : ``}${`${Math.abs(nr)}`.padStart(len, padChr)}`;
@@ -31,8 +27,7 @@ function RoomAuction({ data }) {
         Number.padLeft(Math.floor((remain_sec % 3600) / 60)) +
         ":" +
         Number.padLeft((remain_sec % 3600) % 60);
-
-  const handleBidClick = () => {
+  const handleBidClick = useCallback(() => {
     if (authUserState.authState !== AUTH_LOGIN) {
       toast.error("Please log in and charge coins to bid");
       return;
@@ -55,14 +50,14 @@ function RoomAuction({ data }) {
           return;
         }
       });
-  };
-  const gotoRoomAuctionPage = (room_id) => {
+  });
+  const gotoRoomAuctionPage = useCallback((room_id) => {
     if (authUserState.authState !== AUTH_LOGIN) {
       toast.error("Please log in first");
       return;
     }
     navigate(`/room_auction/${room_id}`);
-  };
+  });
 
   return (
     <div
@@ -71,7 +66,7 @@ function RoomAuction({ data }) {
     >
       <Toaster position="top-center" reverseOrder={false} />
       <div className="room-background">
-        <img src={crown} width="200" height="200"></img>
+        <img src={crown} width="200" height="200" alt="background"></img>
       </div>
       <div className="room-id">room id: #{data.room_id}</div>
       <div className="room-remain-time">{remain_time}</div>

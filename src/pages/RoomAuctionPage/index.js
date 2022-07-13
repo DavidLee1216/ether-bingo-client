@@ -10,18 +10,11 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 
 import toast, { Toaster } from "react-hot-toast";
-import styled from "styled-components";
-import { PropTypes } from "prop-types";
 import "./room_auction_page.css";
 import crown from "../../assets/img/crown.png";
-import { AUTH_LOGIN } from "../../store/actions/authActions/types";
 import RoomService from "../../services/room.service";
-import {
-  getCoins,
-  CheckCoins,
-  getCredits,
-} from "../../store/actions/userActions";
-import { getWonRoomAuction, getOwnRoom } from "../../store/actions/roomActions";
+import { getCredits } from "../../store/actions/userActions";
+import { getWonRoomAuction } from "../../store/actions/roomActions";
 import { padLeft } from "../../utils/common";
 import LoadingIndicator from "../../utils/loading";
 import "./room_auction_page.css";
@@ -73,13 +66,13 @@ function RoomAuctionPage() {
   const timer = useRef();
   const aboutRef = useRef();
   const navigate = useNavigate();
-  let last_id = 0;
+  let last_id = useMemo(0);
   const [about_enable, setAboutEnable] = useState(true);
 
-  const setTimerInterval = () => {
+  const setTimerInterval = useCallback(() => {
     timer.current = setInterval(displayData, 1000);
-  };
-  const getData = () => {
+  });
+  const getData = useCallback(() => {
     let data = { room_id: room_id, last_id: last_id };
     RoomService.getOneRoomAuction(data).then(
       (response) => {
@@ -109,11 +102,11 @@ function RoomAuctionPage() {
         if (error.response.status === 404) navigate("/");
       }
     );
-  };
-  const displayData = () => {
-    getData();
-  };
-  const getRoomSettingHere = () => {
+  });
+  const displayData = useCallback(() => {
+    if (timer.current !== undefined) getData();
+  });
+  const getRoomSettingHere = useCallback(() => {
     let room = {
       room_id: room_id,
     };
@@ -122,8 +115,8 @@ function RoomAuctionPage() {
         setRoomSetting(response.data);
       })
       .catch((error) => {});
-  };
-  const countRemainTime = (elapsedTime) => {
+  });
+  const countRemainTime = useCallback((elapsedTime) => {
     const remain_sec = roomSetting.auction_win_time_limit - elapsedTime;
     const remain_time =
       padLeft(Math.floor(remain_sec / 3600)) +
@@ -132,9 +125,9 @@ function RoomAuctionPage() {
       ":" +
       padLeft((remain_sec % 3600) % 60);
     return remain_time;
-  };
+  });
 
-  const handleBidClick = () => {
+  const handleBidClick = useCallback(() => {
     if (userCoinState.amount < roomSetting.auction_coin_per_bid) {
       toast.error("You don't have enough coins to bid. Please buy coins first");
       return;
@@ -143,18 +136,21 @@ function RoomAuctionPage() {
       room_id: room_id,
       username: authUserState.user.username,
     };
+    setLoading(true);
     RoomService.bidRoom(request)
       .then((response) => {
         dispatch(getCredits());
+        setLoading(false);
       })
       .catch((error) => {
         if (error.response.status === 409) {
           toast.error("You are just the last bidder.");
           return;
         }
+        setLoading(false);
       });
-  };
-  const handleResize = () => {
+  });
+  const handleResize = useCallback(() => {
     if (window.innerWidth < 760) {
       setAboutEnable(false);
       aboutRef.current.style.justifyContent = "center";
@@ -162,7 +158,7 @@ function RoomAuctionPage() {
       setAboutEnable(true);
       aboutRef.current.style.justifyContent = "space-between";
     }
-  };
+  });
   useEffect(() => {
     getData();
     getRoomSettingHere();
@@ -284,6 +280,7 @@ function RoomAuctionPage() {
                 src={crown}
                 width="80"
                 height="80"
+                alt="crown"
               />
               {authUserState.user.username === auctionInfo.winner.username
                 ? "Congratulations! "

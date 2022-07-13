@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import axios from "axios";
 import LoadingIndicator from "../../utils/loading";
 import { authorize } from "../../store/actions/authActions";
-import axiosInstance from "../../axios";
 
 function AuthenticationPage() {
   const { id, key } = useParams();

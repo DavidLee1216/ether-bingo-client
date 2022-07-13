@@ -3,13 +3,10 @@ import React, {
   useEffect,
   useRef,
   useCallback,
-  useMemo,
-  useDispatch,
   useLayoutEffect,
 } from "react";
 import RoomAuction from "../RoomAuction";
 import RoomService from "../../services/room.service";
-import useWindowDimensions from "../../hooks/useWindowDimensions";
 import "./room_auctions.css";
 
 function RoomAuctions() {
@@ -20,7 +17,7 @@ function RoomAuctions() {
   const setTimerInterval = () => {
     timer.current = setInterval(displayData, 1000);
   };
-  const getData = () => {
+  const getData = useCallback(() => {
     RoomService.getRooms()
       .then(
         (response) => {
@@ -34,15 +31,15 @@ function RoomAuctions() {
       .catch((error) => {
         console.log(error);
       });
-  };
-  const displayData = () => {
-    getData();
-  };
-  const handleResize = () => {
+  });
+  const displayData = useCallback(() => {
+    if (timer.current !== undefined) getData();
+  });
+  const handleResize = useCallback(() => {
     setWidth(window.innerWidth);
     row_count = window.innerWidth < 630 ? 1 : window.innerWidth < 960 ? 2 : 3;
     // console.log(window.innerWidth);
-  };
+  });
   useLayoutEffect(() => {
     window.addEventListener("resize", handleResize);
     return () => {

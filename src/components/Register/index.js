@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
@@ -8,11 +8,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import GoogleIcon from "@mui/icons-material/Google";
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton } from "@mui/material";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import LoadingIndicator from "../../utils/loading";
-import { register } from "../../store/actions/authActions";
 import AuthService from "../../services/auth.service";
 import { setAuthState, authTypes } from "../../store/actions/authActions";
 

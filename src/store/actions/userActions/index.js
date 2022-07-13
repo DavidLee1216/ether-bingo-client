@@ -1,6 +1,5 @@
 import * as UserActions from "./types";
 import userService from "../../../services/user.service";
-import axios from "axios";
 
 export { UserActions };
 

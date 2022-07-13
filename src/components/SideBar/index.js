@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import HomeIcon from "@mui/icons-material/Home";
 import HelpIcon from "@mui/icons-material/Help";
+import WysiwygIcon from "@mui/icons-material/Wysiwyg";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import "./sidebar.css";
 import styled from "styled-components";
@@ -16,8 +17,23 @@ function SideBar({ hidden }) {
   const gotoHome = () => {
     navigate("/");
   };
+  const gotoTerms = () => {
+    navigate("/terms");
+  };
+  const gotoHelp = () => {
+    navigate("/about");
+  };
+  const gotoAboutBingo = () => {
+    navigate("/help/bingo");
+  };
+  const gotoAboutAuction = () => {
+    navigate("/help/auction");
+  };
   return (
-    <div className={`sidebar ${hidden ? "hidden" : ""}`}>
+    <div
+      className={`sidebar ${hidden ? "hidden" : ""}`}
+      onClick={(e) => e.stopPropagation()}
+    >
       <IconWrapper onClick={gotoHome}>
         <ItemWrapper>
           <HomeIcon></HomeIcon>
@@ -32,6 +48,25 @@ function SideBar({ hidden }) {
         <ArrowDropDownIcon
           className={`arrow me-3 ${helpArrowUp ? "hidden" : "show"}`}
         />
+      </IconWrapper>
+      {!helpArrowUp && (
+        <SubIconWrapper>
+          <ItemWrapper onClick={gotoHelp}>
+            <span className="text">How it works</span>
+          </ItemWrapper>
+          <ItemWrapper onClick={gotoAboutBingo}>
+            <span className="text">Bingo game</span>
+          </ItemWrapper>
+          <ItemWrapper onClick={gotoAboutAuction}>
+            <span className="text">Room auction</span>
+          </ItemWrapper>
+        </SubIconWrapper>
+      )}
+      <IconWrapper onClick={gotoTerms}>
+        <ItemWrapper>
+          <WysiwygIcon></WysiwygIcon>
+          <span className="text">Terms and Conditions</span>
+        </ItemWrapper>
       </IconWrapper>
     </div>
   );
@@ -60,6 +95,22 @@ const IconWrapper = styled.div`
 `;
 
 const ItemWrapper = styled.div``;
+
+const SubIconWrapper = styled.div`
+  .text {
+    color: rgba(255, 255, 255, 0.8);
+    text-align: left;
+  }
+  cursor: pointer;
+  min-height: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: start;
+  gap: 10px;
+  margin-left: 50px;
+  margin-top: 10px;
+`;
 
 SideBar.propTypes = {
   hidden: PropTypes.bool,

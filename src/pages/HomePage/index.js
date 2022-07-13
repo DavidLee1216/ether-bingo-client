@@ -1,5 +1,4 @@
 import React, { useLayoutEffect, useState } from "react";
-import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import "./home.css";
 import RoomAuctions from "../../components/RoomAuctions";
@@ -20,7 +19,7 @@ function HomePage() {
   };
   return (
     <div className="home">
-      <WinnerBox>HomePage</WinnerBox>
+      <WinnerBox></WinnerBox>
       <SubMenu clickItem={handleSubMenuItem}></SubMenu>
       {ViewList[item]}
       {/* {item === 0 ? (

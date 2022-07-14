@@ -112,7 +112,9 @@ function Header() {
               <span></span>
             </button>
           </div>
-          <HeaderLogo></HeaderLogo>
+          <div className="d-none d-sm-none d-md-block">
+            <HeaderLogo></HeaderLogo>
+          </div>
         </div>
         {authUserState.authState !== AUTH_LOGIN ? (
           <LoginWrapper>

@@ -108,9 +108,6 @@
   .user-drop-down-wrapper {
     min-width: 110px;
   }
-  .logo-wrapper {
-    display: none;
-  }
   .coin-wrapper {
     margin-right: 10px;
   }
@@ -138,9 +135,6 @@
   }
   .user-drop-down-wrapper {
     min-width: 100px;
-  }
-  .logo-wrapper {
-    display: none;
   }
   .coin-wrapper {
     margin-right: 10px;
@@ -259,22 +253,4 @@
 }
 .user-items.hidden {
   display: none;
-}
-
-.crown-icon {
-  fill: gold;
-}
-.logo-wrapper {
-  position: relative;
-  cursor: pointer;
-}
-@import url("https://fonts.googleapis.com/css2?family=Ms+Madi&display=swap");
-.logo-text {
-  position: absolute;
-  top: 0px;
-  left: 80px;
-  font-family: "Ms Madi", cursive;
-  font-size: xx-large;
-  font-weight: 900;
-  color: rgb(49, 240, 97);
 }

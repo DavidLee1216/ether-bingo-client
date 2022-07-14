@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import { ReactComponent as CrownIcon } from "../../assets/img/king_crown.svg";
+import styles from "./logo.module.css";
 
 export default function HeaderLogo() {
   const navigate = useNavigate();
@@ -11,9 +12,13 @@ export default function HeaderLogo() {
 
   return (
     <div>
-      <div className="logo-wrapper" onClick={gotoHome}>
-        <CrownIcon className="crown-icon" width={80} height={40}></CrownIcon>
-        <div className="logo-text">Bingo</div>
+      <div className={styles.logo_wrapper} onClick={gotoHome}>
+        <CrownIcon
+          className={styles.crown_icon}
+          width={80}
+          height={40}
+        ></CrownIcon>
+        <div className={styles.logo_text}>Bingo</div>
       </div>
     </div>
   );

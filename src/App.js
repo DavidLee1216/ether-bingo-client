@@ -16,6 +16,7 @@ import TermsAndService from "./pages/TermsAndService";
 import AboutBingo from "./pages/HelpPage/aboutBingo";
 import AboutAuction from "./pages/HelpPage/aboutAuction";
 import HelpPage from "./pages/HelpPage";
+import ContactUs from "./pages/ContactUs";
 
 const store = Store();
 
@@ -38,6 +39,7 @@ function App() {
           <Route path="/about" element={<HelpPage />} />
           <Route path="/help/bingo" element={<AboutBingo />} />
           <Route path="/help/auction" element={<AboutAuction />} />
+          <Route path="/contact" element={<ContactUs />} />
         </Routes>
         {/* <Footer /> */}
       </BrowserRouter>

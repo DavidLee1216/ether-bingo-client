@@ -18,12 +18,15 @@ import AuthVerify, { parseJwt } from "../../utils/authVerify";
 import { logout, jwtSetUserState } from "../../store/actions/authActions";
 import UserInfoNav from "./userInfoHeader";
 import HeaderLogo from "../HeaderLogo";
-import { getCredits } from "../../store/actions/userActions";
+import { getCredits, HideLoginBox } from "../../store/actions/userActions";
 import { getWonRoomAuction, getOwnRoom } from "../../store/actions/roomActions";
 
 function Header() {
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const [registerHidden, setRegisterHidden] = useState(true);
+  const showLoginBoxState = useSelector(
+    (state) => state.UserInfoReducer.showLoginBox
+  );
   const [loginHidden, setLoginHidden] = useState(true);
   const authUserState = useSelector((state) => state.AuthReducer.authUser);
   const userCoinState = useSelector((state) => state.UserInfoReducer.userCoin);
@@ -43,9 +46,11 @@ function Header() {
   const handleModalClose = () => {
     setLoginHidden(true);
     setRegisterHidden(true);
+    dispatch(HideLoginBox());
   };
   const gotoSignUp = () => {
     setLoginHidden(true);
+    dispatch(HideLoginBox());
     setRegisterHidden(false);
   };
   const gotoLogin = () => {
@@ -55,6 +60,7 @@ function Header() {
   const clearModals = () => {
     setRegisterHidden(true);
     setLoginHidden(true);
+    dispatch(HideLoginBox());
   };
   const logOut = () => {
     dispatch(logout());
@@ -143,7 +149,7 @@ function Header() {
         signed={clearModals}
       />
       <Login
-        hidden={loginHidden}
+        hidden={loginHidden & !showLoginBoxState}
         closeClicked={handleModalClose}
         gotoSignUp={gotoSignUp}
         signed={clearModals}

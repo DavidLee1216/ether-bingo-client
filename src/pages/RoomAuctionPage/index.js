@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
@@ -18,6 +12,8 @@ import { getWonRoomAuction } from "../../store/actions/roomActions";
 import { padLeft } from "../../utils/common";
 import LoadingIndicator from "../../utils/loading";
 import "./room_auction_page.css";
+
+const controller = new AbortController();
 
 function BiddersBox({ bidders }) {
   const BidderList = bidders.map((bidder, index) => (
@@ -66,7 +62,7 @@ function RoomAuctionPage() {
   const timer = useRef();
   const aboutRef = useRef();
   const navigate = useNavigate();
-  let last_id = useMemo(0);
+  let last_id = 0;
   const [about_enable, setAboutEnable] = useState(true);
 
   const setTimerInterval = useCallback(() => {
@@ -167,6 +163,9 @@ function RoomAuctionPage() {
     handleResize();
     return () => {
       clearInterval(timer.current);
+      timer.current = undefined;
+      controller.abort();
+
       window.removeEventListener("resize", handleResize);
     };
   }, []);

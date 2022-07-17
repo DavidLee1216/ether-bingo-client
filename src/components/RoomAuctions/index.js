@@ -9,6 +9,8 @@ import RoomAuction from "../RoomAuction";
 import RoomService from "../../services/room.service";
 import "./room_auctions.css";
 
+const controller = new AbortController();
+
 function RoomAuctions() {
   const [data, setData] = useState([]);
   const [width, setWidth] = useState(window.innerWidth);
@@ -51,6 +53,8 @@ function RoomAuctions() {
     setTimerInterval();
     return () => {
       clearInterval(timer.current);
+      timer.current = undefined;
+      controller.abort();
     };
   }, []);
 

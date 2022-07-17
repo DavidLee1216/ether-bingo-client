@@ -76,6 +76,7 @@ function BingoGames() {
     setTimerInterval();
     return () => {
       clearInterval(timer.current);
+      timer.current = undefined;
       controller.abort();
     };
   }, []);

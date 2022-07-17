@@ -46,6 +46,7 @@ function WinnerBox() {
     setTimerInterval();
     return () => {
       clearInterval(timer.current);
+      timer.current = undefined;
       controller.abort();
     };
   }, []);

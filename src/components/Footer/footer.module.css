@@ -4,3 +4,57 @@
   background-color: black;
   padding: 30px;
 }
+
+.container {
+  display: grid;
+  grid-template-rows: auto;
+  row-gap: 2rem;
+}
+
+.address {
+  margin-top: 2rem;
+  font-size: 0.6em;
+}
+
+.contact_us {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .social_wrapper {
+    grid-column: 1;
+  }
+  .contact {
+    grid-column: 1;
+  }
+  .help {
+    grid-column: 2;
+  }
+  .address {
+    grid-column: 1 / span 2;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .social_wrapper {
+    grid-column: 3;
+  }
+  .contact {
+    grid-column: 2;
+  }
+  .help {
+    grid-column: 3;
+  }
+  .address {
+    grid-column: 1 / span 3;
+  }
+}

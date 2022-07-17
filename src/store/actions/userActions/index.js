@@ -18,6 +18,14 @@ export const ConsumeCoins = (amount) => ({
   amount: amount,
 });
 
+export const ShowLoginBox = () => ({
+  type: UserActions.SHOW_LOGIN_BOX,
+});
+
+export const HideLoginBox = () => ({
+  type: UserActions.HIDE_LOGIN_BOX,
+});
+
 export const buyCoins = (data) => {
   return userService.buyCoins(data);
 };

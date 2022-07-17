@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { ethers, utils } from "ethers";
@@ -13,6 +13,7 @@ import { RootState } from "../../store/reducers";
 import ConfirmModal from "../../utils/confirmModal";
 
 import abi from "../../contracts/EtherBingo.json";
+import { logout } from "../../store/actions/authActions";
 
 type EarningType = {
   id: number;
@@ -41,7 +42,9 @@ function WithdrawPage() {
   const contractAddress: string = process.env.REACT_APP_CONTRACT_ADDRESS!;
   const contractABI = abi.abi;
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const authUserState = useSelector(
     (state: RootState) => state.AuthReducer.authUser
   );
@@ -110,7 +113,7 @@ function WithdrawPage() {
 
   const okVerifyClicked = async () => {
     setVerifyConfirmModal(false);
-    if (localStorage.user === null) navigate("/");
+    if (localStorage.user === undefined) navigate("/");
     let user = JSON.parse(localStorage.user);
     let username = user.username;
     if ((window as any).ethereum) {
@@ -135,12 +138,18 @@ function WithdrawPage() {
         setLoading(true);
 
         await txn.wait();
-        // setLoading(true);
+
         let data = { username: username };
         EarningService.getEarningVerify(data)
           .then((response) => {
-            if (response.data.res === true) handleGetUserEarnings();
             setLoading(false);
+            if (response.data.res === true) handleGetUserEarnings();
+            else {
+              dispatch(logout());
+              localStorage.removeItem("user");
+              localStorage.removeItem("token");
+              navigate("/");
+            }
           })
           .catch((error) => {
             toast.error("Something is wrong. The action did not completed");
@@ -155,7 +164,7 @@ function WithdrawPage() {
   };
 
   const handleGetUserEarnings = () => {
-    if (localStorage.user === null) navigate("/");
+    if (localStorage.user === undefined) navigate("/");
     let user = JSON.parse(localStorage.user);
     let username = user.username;
     let data = { username: username };

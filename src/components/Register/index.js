@@ -6,8 +6,9 @@ import PropTypes from "prop-types";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
-import GoogleIcon from "@mui/icons-material/Google";
+// import GoogleIcon from "@mui/icons-material/Google";
 import CloseIcon from "@mui/icons-material/Close";
+// import { ReactComponent as GoogleSvg } from "../../assets/img/google.svg";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import LoadingIndicator from "../../utils/loading";
@@ -333,13 +334,13 @@ function Register({ hidden, closeClicked, gotoLogin, signed }) {
             ></input>
           </div>
 
-          <div className="mx-auto my-3 text-center fw-bold">OR</div>
+          {/* <div className="mx-auto my-3 text-center fw-bold">OR</div>
           <div className="mx-auto login-submit">
             <button className="login-submit-google-input fw-bold">
-              <GoogleIcon width="16" height="16" fill="green"></GoogleIcon>
+              <GoogleSvg width={16} height={16}></GoogleSvg>
               &nbsp;&nbsp;&nbsp;Sign up with Google
             </button>
-          </div>
+          </div> */}
           <div className="send-to-login text-center">
             Already a member?{" "}
             <span className="goto-login" onClick={gotoLogin}>

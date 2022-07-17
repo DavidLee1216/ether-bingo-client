@@ -4,10 +4,11 @@ import toast, { Toaster } from "react-hot-toast";
 
 import { padLeft } from "../../utils/common";
 import styles from "./bingogame.module.css";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
 import { AUTH_LOGIN } from "../../store/actions/authActions/types";
 import background from "../../assets/img/crown_ticket_noletter.png";
+import { ShowLoginBox } from "../../store/actions/userActions";
 
 type Props = {
   id: number;
@@ -24,6 +25,7 @@ type DataType = {
 };
 
 function BingoItem({ data }: DataType) {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const authUserState = useSelector(
     (state: RootState) => state.AuthReducer.authUser
@@ -31,7 +33,7 @@ function BingoItem({ data }: DataType) {
 
   const getIntoOneGame = () => {
     if (authUserState.authState !== AUTH_LOGIN) {
-      toast.error("Please log in and charge coins to bid");
+      dispatch(ShowLoginBox());
       return;
     }
     if (authUserState.user.wallet_address == "") {

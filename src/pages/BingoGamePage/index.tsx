@@ -572,6 +572,7 @@ function BingoGamePage() {
     setTimerInterval();
     return () => {
       clearInterval(timer.current);
+      timer.current = undefined;
       controller.abort();
     };
   }, []);

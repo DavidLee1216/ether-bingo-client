@@ -22,4 +22,8 @@ const setProfile = (data) => {
   return axios.post("/api/game/profile/set/", data);
 };
 
-export default { getCoins, buyCoins, getProfile, setProfile };
+const contactUs = (data) => {
+  return axios.post("/api/game/contact/", data);
+};
+
+export default { getCoins, buyCoins, getProfile, setProfile, contactUs };

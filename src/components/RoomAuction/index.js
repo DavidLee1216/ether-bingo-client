@@ -8,7 +8,7 @@ import "./room_auction.css";
 import crown from "../../assets/img/crown.png";
 import { AUTH_LOGIN } from "../../store/actions/authActions/types";
 import RoomService from "../../services/room.service";
-import { getCredits } from "../../store/actions/userActions";
+import { getCredits, ShowLoginBox } from "../../store/actions/userActions";
 
 Number.padLeft = (nr, len = 2, padChr = `0`) =>
   `${nr < 0 ? `-` : ``}${`${Math.abs(nr)}`.padStart(len, padChr)}`;
@@ -29,7 +29,7 @@ function RoomAuction({ data }) {
         Number.padLeft((remain_sec % 3600) % 60);
   const handleBidClick = useCallback(() => {
     if (authUserState.authState !== AUTH_LOGIN) {
-      toast.error("Please log in and charge coins to bid");
+      dispatch(ShowLoginBox());
       return;
     }
     if (userCoinState.amount < data.coin_per_bid) {
@@ -53,7 +53,7 @@ function RoomAuction({ data }) {
   });
   const gotoRoomAuctionPage = useCallback((room_id) => {
     if (authUserState.authState !== AUTH_LOGIN) {
-      toast.error("Please log in first");
+      dispatch(ShowLoginBox());
       return;
     }
     navigate(`/room_auction/${room_id}`);
